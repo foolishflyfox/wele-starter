@@ -52,7 +52,7 @@ function createWindow(): void {
     }
   })
 
-  const startUrl = isDev ? 'http://localhost:5170' : 'http://localhost:4300'
+  const startUrl = isDev ? 'http://localhost:4030' : 'http://localhost:4300'
 
   mainWindow.loadURL(startUrl)
 
@@ -104,14 +104,19 @@ app.on('ready', () => {
 })
 
 app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('before-quit', () => {
   // 注销全局快捷键
   globalShortcut.unregisterAll()
 
+  // 杀死子进程
   if (serverProcess) {
-    serverProcess.kill()
-  }
-  if (process.platform !== 'darwin') {
-    app.quit()
+    console.log('Killing server process...')
+    serverProcess.kill('SIGTERM')
   }
 })
 
