@@ -1,8 +1,8 @@
 <template>
-  <div class="tsx-counter">
-    <span
-      >Count: <strong>{{ count }}</strong> | Double: <strong>{{ count * 2 }}</strong></span
-    >
+  <div class="tsx-counter bg-#00bfff50 p-5px rounded-md">
+    <span>
+      Count: <strong>{{ count }}</strong> | Double: <strong>{{ count * 2 }}</strong>
+    </span>
     <button @click="count--">-</button>
     <button @click="count++">+</button>
     <button @click="count = 0">Reset</button>
@@ -21,7 +21,7 @@ const InlineTag = defineComponent({
     text: { type: String, required: true }
   },
   setup(props) {
-    return () => <span style={{ color: 'red', marginLeft: '8px' }}>[{props.text}]</span>;
+    return () => <span class="text-red ml-8px">[{props.text}]</span>;
   }
 });
 </script>

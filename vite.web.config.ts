@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
+import unocss from 'unocss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -13,7 +14,7 @@ export default defineConfig({
       input: resolve(__dirname, 'src/renderer/index.html')
     }
   },
-  plugins: [vue(), vueJsx(), vueDevTools()],
+  plugins: [unocss(), vue(), vueJsx(), vueDevTools()],
   server: {
     port: 4030,
     proxy: {

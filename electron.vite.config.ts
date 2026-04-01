@@ -3,6 +3,7 @@ import { defineConfig } from 'electron-vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
+import unocss from 'unocss/vite';
 
 export default defineConfig({
   main: {
@@ -28,7 +29,7 @@ export default defineConfig({
         '@': resolve(__dirname, 'src/renderer/src')
       }
     },
-    plugins: [vue(), vueJsx(), vueDevTools()],
+    plugins: [unocss(), vue(), vueJsx(), vueDevTools()],
     server: {
       port: 4030,
       proxy: {
