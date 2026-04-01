@@ -26,10 +26,15 @@
     <h3>Error:</h3>
     <p>{{ error }}</p>
   </div>
+
+  <hr />
+  <h3>TSX Demo</h3>
+  <TsxCounter />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import TsxCounter from './TsxCounter.vue';
 
 const result = ref<Record<string, string> | null>(null);
 const loading = ref(false);

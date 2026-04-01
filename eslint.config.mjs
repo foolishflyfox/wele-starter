@@ -39,7 +39,7 @@ export default defineConfig(
         'error',
         {
           script: {
-            lang: 'ts'
+            lang: ['ts', 'tsx']
           }
         }
       ]

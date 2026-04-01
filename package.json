@@ -9,7 +9,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-strategy content .",
-    "typecheck": "vue-tsc --noEmit",
+    "typecheck": "vue-tsc -p tsconfig.web.json --noEmit",
     "check": "pnpm format && pnpm lint && pnpm typecheck",
     "dev": "pnpm dev:web",
     "dev:server": "nest start --watch",
@@ -43,6 +43,7 @@
     "@nestjs/schematics": "^11.0.1",
     "@types/node": "^22.19.1",
     "@vitejs/plugin-vue": "^6.0.2",
+    "@vitejs/plugin-vue-jsx": "^5.1.5",
     "concurrently": "^9.2.1",
     "electron": "^39.2.6",
     "electron-builder": "^26.0.12",
