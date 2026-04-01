@@ -10,14 +10,26 @@ let mainWindow: BrowserWindow | null = null
 let serverProcess: ChildProcess | null = null
 
 function startServer(): void {
-  // 编译后的服务器位置
-  const serverScript = join(__dirname, '../../dist/server/main.js')
+  const isDev = process.env.NODE_ENV === 'development'
 
-  console.log('Starting server from:', serverScript)
+  let serverScript: string
+  let args: string[] = []
 
-  serverProcess = fork(serverScript, [], {
-    env: { ...process.env, PORT: '4300', NODE_ENV: 'development' },
-    stdio: 'inherit'
+  if (isDev) {
+    // 开发模式：使用 ts-node 直接运行 TypeScript 源代码
+    serverScript = 'node'
+    args = ['--loader', 'ts-node/esm', 'src/server/main.ts']
+    console.log('Starting server in dev mode: ts-node src/server/main.ts')
+  } else {
+    // 生产模式：运行编译后的 JavaScript
+    serverScript = join(__dirname, '../../dist/server/main.js')
+    console.log('Starting server in prod mode:', serverScript)
+  }
+
+  serverProcess = fork(serverScript, args, {
+    env: { ...process.env, PORT: '4300', NODE_ENV: isDev ? 'development' : 'production' },
+    stdio: 'inherit',
+    cwd: isDev ? join(__dirname, '../..') : undefined
   })
 
   serverProcess.on('error', (err) => {
