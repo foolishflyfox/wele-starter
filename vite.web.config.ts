@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
       input: resolve(__dirname, 'src/renderer/index.html')
     }
   },
-  plugins: [vue()],
+  plugins: [vue(), vueDevTools()],
   server: {
     port: 4030,
     proxy: {

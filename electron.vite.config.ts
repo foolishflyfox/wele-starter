@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import { defineConfig } from 'electron-vite';
 import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
 
 export default defineConfig({
   main: {
@@ -26,7 +27,7 @@ export default defineConfig({
         '@': resolve(__dirname, 'src/renderer/src')
       }
     },
-    plugins: [vue()],
+    plugins: [vue(), vueDevTools()],
     server: {
       port: 4030,
       proxy: {
