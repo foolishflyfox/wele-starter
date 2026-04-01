@@ -31,7 +31,7 @@ async function bootstrap() {
         console.log(`✓ Serving static files from: ${staticPath}`);
         break;
       }
-    } catch (err) {
+    } catch (_err) {
       // 继续尝试下一个路径
     }
   }
