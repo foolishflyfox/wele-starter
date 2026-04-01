@@ -4,6 +4,10 @@ directories:
   buildResources: build
   output: dist/visink-app
 files:
+  - 'out/**'
+  - 'dist/visink-web/**'
+  - 'package.json'
+  - 'node_modules/**'
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
