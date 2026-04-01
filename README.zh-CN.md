@@ -92,29 +92,42 @@ visink/
 
 ## 可用的脚本命令
 
+### 🔧 开发
 ```bash
-# 开发
-pnpm dev              # Web 开发（前端 + 后端）
-pnpm dev:app          # Electron 开发
-pnpm dev:server       # 后端开发
-pnpm dev:ui           # 前端开发
+pnpm dev              # 启动 Web 开发（前端 + 后端并发）
+pnpm dev:app          # 启动 Electron 开发模式
+```
 
-# 构建
-pnpm build            # 构建 Web（服务器 + UI，不含依赖）
-pnpm build:prod       # 生产构建（包含所有依赖，用于部署）
+### 🏗️ 构建
+```bash
+pnpm build            # 构建 Web（输出：dist/visink-web/）
+pnpm build:prod       # 生产构建（输出：dist/visink-web/ 包含依赖）
+pnpm build:app        # 构建 Electron 应用（输出：dist/visink-app/ + dist/visink-web/）
+
+# 高级命令（很少直接使用）
 pnpm build:server     # 仅构建后端
 pnpm build:ui         # 仅构建前端
-pnpm build:app        # 构建完整的 Electron 应用
+```
 
-# 代码质量
+### ✨ 代码质量
+```bash
 pnpm lint             # 运行 ESLint
 pnpm format           # 使用 Prettier 格式化
-pnpm typecheck        # TypeScript 检查
-
-# 其他
-pnpm preview          # 预览生产构建
-pnpm postinstall      # 安装 Electron 原生模块
+pnpm typecheck        # TypeScript 类型检查
 ```
+
+### 📦 分发
+```bash
+pnpm copy:deps        # 复制依赖到 dist/visink-web/server/（build:prod 使用）
+```
+
+### 🔍 快速参考
+
+| 命令 | 输出 | 大小 | 用途 |
+|------|------|------|------|
+| `pnpm build` | `dist/visink-web/`（仅代码） | ~100 KB | 开发、测试 |
+| `pnpm build:prod` | `dist/visink-web/`（含依赖） | ~500+ MB | 生产服务器部署 |
+| `pnpm build:app` | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB | Electron 应用发布 |
 
 ## 推荐的 IDE 设置
 
@@ -125,15 +138,18 @@ pnpm postinstall      # 安装 Electron 原生模块
 
 ## 配置文件说明
 
-- `electron.vite.config.ts` - Electron 和 Vite 构建配置
-- `vite.web.config.ts` - Web/UI 构建配置
-- `tsconfig.json` - TypeScript 配置（主配置）
-- `tsconfig.server.json` - NestJS 后端的 TypeScript 配置
-- `tsconfig.web.json` - Vue 前端的 TypeScript 配置
-- `nest-cli.json` - NestJS CLI 配置
-- `electron-builder.yml` - Electron 应用构建设置
-- `.prettierrc.yaml` - 代码格式化规则
-- `eslint.config.mjs` - 代码检查规则
+| 文件 | 用途 | 输出路径 |
+|------|------|---------|
+| `vite.web.config.ts` | 前端构建配置 | `dist/visink-web/ui/` |
+| `nest-cli.json` | NestJS 构建配置 | `dist/visink-web/server/` |
+| `tsconfig.server.json` | 后端 TypeScript 配置 | `dist/visink-web/server/` |
+| `tsconfig.web.json` | 前端 TypeScript 配置 | `dist/visink-web/ui/` |
+| `electron.vite.config.ts` | Electron 构建配置 | `out/main`、`out/preload`、`out/renderer` |
+| `electron-builder.yml` | Electron 应用打包配置 | `dist/visink-app/` |
+| `scripts/copy-deps.js` | 依赖复制脚本 | `dist/visink-web/server/` |
+| `.prettierrc.yaml` | 代码格式化规则 | - |
+| `eslint.config.mjs` | 代码检查规则 | - |
+| `tsconfig.json` | 主 TypeScript 配置 | - |
 
 ## 为发布构建应用
 
@@ -205,13 +221,21 @@ pnpm build:prod
 - 本地开发或测试
 - 针对构建代码运行测试
 - 想要最小化开发过程中的构建时间
+- 输出：`dist/visink-web/` 包含 `ui/` 和 `server/`（需要项目的 `node_modules`）
 
 **使用 `pnpm build:prod` 时：**
 
 - 准备生产部署
 - 构建 Docker 镜像
-- 部署到云平台（Heroku、Railway 等）
+- 部署到云平台（Heroku、Railway、AWS 等）
 - 创建可分发的包
+- 输出：`dist/visink-web/` 的 `server/` 中包含所有依赖
+
+**使用 `pnpm build:app` 时：**
+
+- 发布 Electron 桌面应用
+- 创建特定平台的安装程序（DMG、EXE、AppImage 等）
+- 输出：`dist/visink-app/` 包含安装程序 + `dist/visink-web/` 用于内部使用
 
 ### Web 应用程序部署
 

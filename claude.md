@@ -107,14 +107,25 @@ pnpm build          # Builds both frontend (dist/visink-web/ui) and backend (dis
 
 ### Build Commands
 
-**Development:**
+**Development Build:**
 ```bash
-pnpm build          # Builds frontend + backend (no dependencies)
+pnpm build          # Builds: pnpm build:server + pnpm build:ui
+                    # Output: dist/visink-web/ui/ + dist/visink-web/server/
+                    # Size: ~100 KB (code only, no dependencies)
 ```
 
-**Production/Deployment:**
+**Production Build:**
 ```bash
-pnpm build:prod     # Builds frontend + backend + copies all dependencies to dist/visink-web/server/
+pnpm build:prod     # Builds: pnpm build:server + pnpm build:ui + pnpm copy:deps
+                    # Output: dist/visink-web/ with all dependencies
+                    # Size: ~500+ MB (self-contained)
+```
+
+**Electron App Build:**
+```bash
+pnpm build:app      # Builds: pnpm build:ui + pnpm build:server + electron-vite + electron-builder
+                    # Output: dist/visink-app/ (installers) + dist/visink-web/
+                    # Size: ~100-200 MB (per platform)
 ```
 
 ### Quick Deploy
@@ -164,48 +175,64 @@ Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
 **After `pnpm build` (development):**
 ```
 dist/
-├── web/
-│   ├── ui/                   # Compiled frontend (Vue)
-│   │   ├── index.html
-│   │   ├── assets/
-│   │   └── ...
-│   └── server/               # Compiled backend code only (NestJS)
-│       ├── main.js
-│       ├── app.controller.js
-│       ├── app.module.js
-│       └── ...
-└── visink/visink-app/        # Electron app (from build:app)
+└── visink-web/              # Web app package
+    ├── ui/                  # Compiled frontend (Vue) ~70 KB
+    │   ├── index.html
+    │   ├── assets/
+    │   │   ├── index-*.js (~62 KB)
+    │   │   └── index-*.css (~7 KB)
+    │   └── ...
+    └── server/              # Compiled backend (NestJS)
+        ├── main.js
+        ├── app.controller.js
+        ├── app.module.js
+        └── ... (other files)
 ```
-Use this for: development, testing. Requires `node_modules` from project root.
+Use for: development, testing. Requires `node_modules` from project root.
 
 **After `pnpm build:prod` (production):**
 ```
 dist/
-├── web/                      # Complete web application
-│   ├── ui/                   # Compiled frontend (Vue)
-│   │   ├── index.html
-│   │   ├── assets/
-│   │   └── ...
-│   └── server/               # Complete, self-contained backend
-│       ├── main.js           # Entry point
-│       ├── app.controller.js
-│       ├── app.module.js
-│       ├── package.json      # Copied
-│       ├── pnpm-lock.yaml    # Copied
-│       ├── node_modules/     # All dependencies (copied with hard links)
-│       │   ├── @nestjs/
-│       │   ├── express/
-│       │   └── ... (all 500+ packages)
-│       └── web/              # Frontend build (served by NestJS)
-│           ├── index.html
-│           ├── assets/
-│           └── ...
-└── visink/visink-app/        # Electron app installers
-    ├── visink-x.x.x.dmg      # macOS
-    ├── visink-x.x.x.exe      # Windows
-    └── ...                   # Linux packages
+└── visink-web/              # Complete self-contained web app
+    ├── ui/                  # Compiled frontend (original)
+    │   ├── index.html
+    │   ├── assets/
+    │   └── ...
+    └── server/              # Complete backend with everything
+        ├── main.js
+        ├── package.json     # ✓ Copied
+        ├── pnpm-lock.yaml   # ✓ Copied
+        ├── node_modules/    # ✓ All dependencies (~500+ MB)
+        │   ├── @nestjs/
+        │   ├── express/
+        │   └── ... (500+ packages)
+        ├── web/             # ✓ Frontend copy (for production)
+        │   ├── index.html
+        │   └── assets/
+        └── ... (other files)
 ```
 Ready to deploy: `cd dist/visink-web && node server/main.js` - no installation needed!
+
+**After `pnpm build:app` (Electron app):**
+```
+dist/
+├── visink-web/              # Web app (same as pnpm build)
+│   ├── ui/
+│   └── server/
+│
+└── visink-app/              # Electron installers
+    └── mac/                 # macOS (platform-specific)
+        ├── visink-1.0.0.dmg
+        ├── visink-1.0.0-mac.zip
+        ├── visink.app/
+        └── ...
+
+out/                         # Electron build artifacts
+├── main/                    # Main process compiled
+├── preload/                 # Preload script compiled
+└── renderer/                # Renderer process compiled
+```
+Ready to deploy: Double-click installer or app bundle!
 
 ## Contributing
 

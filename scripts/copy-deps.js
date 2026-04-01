@@ -1,14 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { execSync } from 'child_process'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.join(__dirname, '..')
 const distVisinkWebDir = path.join(projectRoot, 'dist', 'visink-web')
 const distServerDir = path.join(distVisinkWebDir, 'server')
 const distUiDir = path.join(distVisinkWebDir, 'ui')
-const nodeModulesDir = path.join(projectRoot, 'node_modules')
-const distNodeModulesDir = path.join(distServerDir, 'node_modules')
 const distServerWebDir = path.join(distServerDir, 'web')
 
 let copiedCount = 0
@@ -74,45 +73,65 @@ function copyFile(src, dest) {
 }
 
 try {
-  const nodeModulesExist = fs.existsSync(distNodeModulesDir)
+  const nodeModulesExist = fs.existsSync(path.join(distServerDir, 'node_modules'))
 
-  console.log('📦 Copying dependencies and frontend to dist/visink-web/server...')
+  console.log('📦 Setting up production dependencies in dist/visink-web/server...')
 
-  // Incremental copy: skip existing files
-  console.log('  Copying node_modules...')
-  copyDirSync(nodeModulesDir, distNodeModulesDir, true)
-
-  // Copy package.json
-  console.log('  Copying package.json...')
+  // Step 1: Copy package.json and lock files FIRST
+  console.log('  📄 Copying package.json...')
   copyFile(
     path.join(projectRoot, 'package.json'),
     path.join(distServerDir, 'package.json')
   )
 
-  // Copy pnpm-lock.yaml
   if (fs.existsSync(path.join(projectRoot, 'pnpm-lock.yaml'))) {
-    console.log('  Copying pnpm-lock.yaml...')
+    console.log('  📄 Copying pnpm-lock.yaml...')
     copyFile(
       path.join(projectRoot, 'pnpm-lock.yaml'),
       path.join(distServerDir, 'pnpm-lock.yaml')
     )
   }
 
-  // Copy web frontend build
+  // Step 2: Install ONLY production dependencies in dist/server
+  console.log('  🔧 Installing production dependencies only (--prod)...')
+  try {
+    execSync('pnpm install --prod --frozen-lockfile --ignore-scripts', {
+      cwd: distServerDir,
+      stdio: 'inherit'
+    })
+    console.log('  ✅ Production dependencies installed')
+  } catch (err) {
+    console.error('  ❌ Failed to install dependencies:', err.message)
+    console.log('  💡 Falling back to copying node_modules from project root...')
+
+    // Fallback: copy node_modules if pnpm install fails
+    const nodeModulesDir = path.join(projectRoot, 'node_modules')
+    const distNodeModulesDir = path.join(distServerDir, 'node_modules')
+
+    if (fs.existsSync(nodeModulesDir)) {
+      console.log('  📦 Copying node_modules...')
+      copyDirSync(nodeModulesDir, distNodeModulesDir, true)
+      console.log('  ⚠️  Warning: Full node_modules copied (includes devDependencies)')
+    } else {
+      throw new Error('node_modules not found and pnpm install failed')
+    }
+  }
+
+  // Step 3: Copy frontend files
   if (fs.existsSync(distUiDir)) {
-    console.log('  Copying frontend to server/web...')
+    console.log('  📄 Copying frontend to server/web...')
     copyDirSync(distUiDir, distServerWebDir, true)
   } else {
     console.warn('  ⚠️  Warning: dist/visink-web/ui not found. Run pnpm build:ui first.')
   }
 
-  console.log('✅ Dependencies copied successfully!')
-  console.log(`   📊 Copied: ${copiedCount} files | Skipped: ${skippedCount} files`)
+  console.log('✅ Setup completed successfully!')
+  console.log(`   📊 Files copied: ${copiedCount} | Skipped: ${skippedCount}`)
   if (nodeModulesExist && skippedCount > 0) {
     console.log('   ⚡ Incremental copy completed (reused existing files)')
   }
   console.log(`🚀 Ready to deploy: cd ${distVisinkWebDir} && node server/main.js`)
 } catch (error) {
-  console.error('❌ Error copying dependencies:', error.message)
+  console.error('❌ Error during setup:', error.message)
   process.exit(1)
 }

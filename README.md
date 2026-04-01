@@ -92,29 +92,42 @@ visink/
 
 ## Available Scripts
 
+### 🔧 Development
 ```bash
-# Development
-pnpm dev              # Web dev (frontend + backend)
-pnpm dev:app          # Electron dev
-pnpm dev:server       # Backend dev
-pnpm dev:ui           # Frontend dev
+pnpm dev              # Start web dev (frontend + backend concurrently)
+pnpm dev:app          # Start Electron dev mode
+```
 
-# Building
-pnpm build            # Build web (server + UI, no dependencies)
-pnpm build:prod       # Build for production (includes all dependencies)
+### 🏗️ Building
+```bash
+pnpm build            # Build web (output: dist/visink-web/)
+pnpm build:prod       # Build for production (output: dist/visink-web/ with dependencies)
+pnpm build:app        # Build Electron app (output: dist/visink-app/ + dist/visink-web/)
+
+# Advanced (rarely used directly)
 pnpm build:server     # Build backend only
 pnpm build:ui         # Build frontend only
-pnpm build:app        # Build complete Electron app
+```
 
-# Code Quality
+### ✨ Code Quality
+```bash
 pnpm lint             # Run ESLint
 pnpm format           # Format with Prettier
-pnpm typecheck        # TypeScript check
-
-# Other
-pnpm preview          # Preview production build
-pnpm postinstall      # Install Electron native modules
+pnpm typecheck        # TypeScript type checking
 ```
+
+### 📦 Distribution
+```bash
+pnpm copy:deps        # Copy dependencies to dist/visink-web/server/ (used by build:prod)
+```
+
+### 🔍 Quick Reference
+
+| Command | Output | Size | Use Case |
+|---------|--------|------|----------|
+| `pnpm build` | `dist/visink-web/` (code only) | ~100 KB | Development, testing |
+| `pnpm build:prod` | `dist/visink-web/` (prod deps only) | **~150-250 MB** ⬇️ | Production server deployment |
+| `pnpm build:app` | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB | Electron app release |
 
 ## Recommended IDE Setup
 
@@ -125,15 +138,18 @@ pnpm postinstall      # Install Electron native modules
 
 ## Configuration Files
 
-- `electron.vite.config.ts` - Electron and Vite build configuration
-- `vite.web.config.ts` - Web/UI build configuration
-- `tsconfig.json` - TypeScript configuration (main)
-- `tsconfig.server.json` - TypeScript for NestJS backend
-- `tsconfig.web.json` - TypeScript for Vue frontend
-- `nest-cli.json` - NestJS CLI configuration
-- `electron-builder.yml` - Electron app builder settings
-- `.prettierrc.yaml` - Code formatting rules
-- `eslint.config.mjs` - Linting rules
+| File | Purpose | Output Path |
+|------|---------|-------------|
+| `vite.web.config.ts` | Frontend build configuration | `dist/visink-web/ui/` |
+| `nest-cli.json` | NestJS build configuration | `dist/visink-web/server/` |
+| `tsconfig.server.json` | Backend TypeScript config | `dist/visink-web/server/` |
+| `tsconfig.web.json` | Frontend TypeScript config | `dist/visink-web/ui/` |
+| `electron.vite.config.ts` | Electron build configuration | `out/main`, `out/preload`, `out/renderer` |
+| `electron-builder.yml` | Electron app packaging config | `dist/visink-app/` |
+| `scripts/copy-deps.js` | Dependency copying script | `dist/visink-web/server/` |
+| `.prettierrc.yaml` | Code formatting rules | - |
+| `eslint.config.mjs` | Linting rules | - |
+| `tsconfig.json` | Main TypeScript configuration | - |
 
 ## Building for Distribution
 
@@ -171,7 +187,7 @@ The application uses a **unified deployment model**:
 | Command | Use Case | Output |
 |---------|----------|--------|
 | `pnpm build` | Development, testing | `dist/visink-web/server` (code only), `dist/visink-web/ui` |
-| `pnpm build:prod` | Deployment | `dist/visink-web/server` (code + node_modules), `dist/visink-web/ui` |
+| `pnpm build:prod` | Deployment | `dist/visink-web/server` (code + prod deps), `dist/visink-web/ui` |
 
 **Development Build:**
 ```bash
@@ -199,12 +215,19 @@ pnpm build:prod
 - Developing or testing locally
 - Running tests against built code
 - Want to minimize build time during development
+- Output: `dist/visink-web/` with `ui/` and `server/` (requires project `node_modules`)
 
 **Use `pnpm build:prod` when:**
 - Preparing code for production deployment
 - Building Docker images
-- Deploying to cloud platforms (Heroku, Railway, etc.)
+- Deploying to cloud platforms (Heroku, Railway, AWS, etc.)
 - Creating distributable packages
+- Output: `dist/visink-web/` with all dependencies included in `server/`
+
+**Use `pnpm build:app` when:**
+- Releasing Electron desktop application
+- Creating platform-specific installers (DMG, EXE, AppImage, etc.)
+- Output: `dist/visink-app/` with installers + `dist/visink-web/` for internal use
 
 ### Web Application Deployment
 
@@ -221,12 +244,16 @@ cd dist/visink-web && node server/main.js
 # Application available at http://localhost:4300
 ```
 
-After `pnpm build:prod`, the `dist/web/` directory is completely self-contained:
+After `pnpm build:prod`, the `dist/visink-web/` directory is completely self-contained:
 - `dist/visink-web/ui/` - Compiled frontend code
-- `dist/visink-web/server/` - Compiled backend code with all npm dependencies
-  - `dist/visink-web/server/node_modules/` - All dependencies
+- `dist/visink-web/server/` - Compiled backend with production dependencies only
+  - `dist/visink-web/server/node_modules/` - **Production dependencies only** (~150-250 MB)
+    - Installed via `pnpm install --prod --frozen-lockfile` during build
+    - Excludes devDependencies, test files, and unnecessary artifacts
   - `dist/visink-web/server/web/` - Copy of frontend (served by NestJS)
   - Configuration files (package.json, pnpm-lock.yaml)
+
+**Size Optimization:** Production-only dependencies reduce size by 50-70% compared to full node_modules (~150-250 MB instead of 500+ MB).
 
 Ready to deploy without any additional installation steps: `cd dist/visink-web && node server/main.js`
 
