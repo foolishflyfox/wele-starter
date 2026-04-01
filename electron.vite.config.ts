@@ -3,14 +3,38 @@ import { defineConfig } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  main: {},
+  main: {
+    build: {
+      outDir: 'out/main',
+      rollupOptions: {
+        output: {
+          format: 'es',
+          entryFileNames: 'index.js'
+        }
+      }
+    },
+    resolve: {
+      alias: {
+        '@main': resolve('src/main')
+      }
+    }
+  },
   preload: {},
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@': resolve(__dirname, 'src/renderer/src')
       }
     },
-    plugins: [vue()]
+    plugins: [vue()],
+    server: {
+      port: 5170,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:4300',
+          changeOrigin: true
+        }
+      }
+    }
   }
 })
