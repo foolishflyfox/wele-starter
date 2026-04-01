@@ -26,7 +26,6 @@
     <h3>Error:</h3>
     <p>{{ error }}</p>
   </div>
-  <Versions />
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,6 @@
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, globalShortcut } from 'electron'
 import { join, dirname } from 'path'
-import { fork, ChildProcess } from 'child_process'
+import { fork, spawn, ChildProcess } from 'child_process'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -12,25 +12,23 @@ let serverProcess: ChildProcess | null = null
 function startServer(): void {
   const isDev = process.env.NODE_ENV === 'development'
 
-  let serverScript: string
-  let args: string[] = []
-
   if (isDev) {
-    // 开发模式：使用 ts-node 直接运行 TypeScript 源代码
-    serverScript = 'node'
-    args = ['--loader', 'ts-node/esm', 'src/server/main.ts']
+    // 开发模式：使用 spawn 运行 ts-node
     console.log('Starting server in dev mode: ts-node src/server/main.ts')
+    serverProcess = spawn('node', ['--loader', 'ts-node/esm', 'src/server/main.ts'], {
+      env: { ...process.env, PORT: '4300', NODE_ENV: 'development' },
+      stdio: 'inherit',
+      cwd: join(__dirname, '../..')
+    })
   } else {
-    // 生产模式：运行编译后的 JavaScript
-    serverScript = join(__dirname, '../../dist/server/main.js')
+    // 生产模式：使用 fork 运行编译后的 JavaScript
+    const serverScript = join(__dirname, '../../dist/server/main.js')
     console.log('Starting server in prod mode:', serverScript)
+    serverProcess = fork(serverScript, [], {
+      env: { ...process.env, PORT: '4300', NODE_ENV: 'production' },
+      stdio: 'inherit'
+    })
   }
-
-  serverProcess = fork(serverScript, args, {
-    env: { ...process.env, PORT: '4300', NODE_ENV: isDev ? 'development' : 'production' },
-    stdio: 'inherit',
-    cwd: isDev ? join(__dirname, '../..') : undefined
-  })
 
   serverProcess.on('error', (err) => {
     console.error('Server process error:', err)
@@ -42,24 +40,21 @@ function startServer(): void {
 }
 
 function createWindow(): void {
+  const isDev = process.env.NODE_ENV === 'development'
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: isDev ? undefined : join(__dirname, '../preload/index.js'),
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: !isDev
     }
   })
 
-  const isDev = process.env.NODE_ENV === 'development'
   const startUrl = isDev ? 'http://localhost:5170' : 'http://localhost:4300'
 
   mainWindow.loadURL(startUrl)
-
-  if (isDev) {
-    mainWindow.webContents.openDevTools()
-  }
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -99,9 +94,19 @@ app.on('ready', () => {
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  // 注册快捷键打开开发者工具
+  globalShortcut.register('CmdOrCtrl+Shift+I', () => {
+    if (mainWindow) {
+      mainWindow.webContents.toggleDevTools()
+    }
+  })
 })
 
 app.on('window-all-closed', () => {
+  // 注销全局快捷键
+  globalShortcut.unregisterAll()
+
   if (serverProcess) {
     serverProcess.kill()
   }
