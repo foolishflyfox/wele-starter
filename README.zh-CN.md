@@ -159,8 +159,8 @@ pnpm build:app
 
 应用程序采用**统一部署模型**：
 
-- 前端（Vue）构建为静态文件 → `dist/web/`
-- 后端（NestJS）构建 → `dist/server/`
+- 前端（Vue）构建为静态文件 → `dist/visink-web/ui/`
+- 后端（NestJS）构建 → `dist/visink-web/server/`
 - NestJS 提供前端静态文件服务
 - API 路由在 `/api` 前缀下
 - 单个 Node.js 进程同时提供前端和后端
@@ -171,8 +171,8 @@ pnpm build:app
 
 | 命令              | 用途       | 输出                                             |
 | ----------------- | ---------- | ------------------------------------------------ |
-| `pnpm build`      | 开发、测试 | `dist/server`（仅代码）、`dist/web`              |
-| `pnpm build:prod` | 部署       | `dist/server`（代码 + node_modules）、`dist/web` |
+| `pnpm build`      | 开发、测试 | `dist/visink-web/server`（仅代码）、`dist/visink-web/ui`              |
+| `pnpm build:prod` | 部署       | `dist/visink-web/server`（代码 + node_modules）、`dist/visink-web/ui` |
 
 **开发构建：**
 
@@ -193,10 +193,10 @@ pnpm build:prod
 ```
 
 - 构建前端和后端代码
-- 复制所有 `node_modules` 和配置文件到 `dist/server/`
+- 复制所有 `node_modules` 和配置文件到 `dist/visink-web/server/`
 - 创建完全独立的部署包
 - 用途：生产部署、Docker 镜像、CI/CD 管道
-- 部署方式：只上传 `dist/server` 目录
+- 部署方式：只上传 `dist/visink-web/server` 目录
 
 #### 何时使用各命令
 
@@ -223,19 +223,19 @@ pnpm build:prod
 # 生产构建（包含所有依赖）
 pnpm build:prod
 
-# 直接运行服务器（所有依赖已包含在 dist/server/ 中）
-node dist/server/main.js
+# 直接运行服务器（所有依赖已包含在 dist/visink-web/server/ 中）
+cd dist/visink-web && node server/main.js
 # 应用访问地址 http://localhost:4300
 ```
 
-执行 `pnpm build:prod` 后，`dist/server/` 目录完全独立包含：
+执行 `pnpm build:prod` 后，`dist/web/` 目录完全独立：
+- `dist/visink-web/ui/` - 编译后的前端代码
+- `dist/visink-web/server/` - 包含所有依赖的编译后端代码
+  - `dist/visink-web/server/node_modules/` - 所有依赖
+  - `dist/visink-web/server/web/` - 前端副本（由 NestJS 提供）
+  - 配置文件（package.json、pnpm-lock.yaml）
 
-- 编译后的后端代码
-- 所有 npm 依赖（node_modules）
-- 前端构建文件
-- 配置文件（package.json、pnpm-lock.yaml）
-
-无需任何额外的安装步骤，开箱即用。
+无需任何额外的安装步骤，开箱即用：`cd dist/visink-web && node server/main.js`
 
 #### Docker 部署
 
@@ -256,11 +256,11 @@ RUN pnpm build:prod
 FROM node:20-alpine
 WORKDIR /app
 
-# 复制所有构建输出（包括 node_modules，无需构建）
-COPY --from=builder /app/dist/server ./
+# 复制整个 dist/web 目录（ui + server 及 node_modules）
+COPY --from=builder /app/dist/web ./
 
 EXPOSE 4300
-CMD ["node", "main.js"]
+CMD ["cd server && node main.js"]
 ```
 
 **构建和运行：**
@@ -280,9 +280,9 @@ pnpm build:prod
 # Dockerfile.prod
 FROM node:20-alpine
 WORKDIR /app
-COPY dist/server ./
+COPY dist/web ./
 EXPOSE 4300
-CMD ["node", "main.js"]
+CMD ["cd server && node main.js"]
 
 # 构建和运行
 docker build -f Dockerfile.prod -t visink:latest .
@@ -292,7 +292,7 @@ docker run -p 4300:4300 visink:latest
 **对比：**
 
 - 方案 1：在 Docker 容器中完整构建（推荐用于 CI/CD）
-- 方案 2：本地构建，只推送生产产物（镜像更小，部署更快）
+- 方案 2：本地构建，只推送 `dist/web`（镜像更小，部署更快）
 
 #### 云平台部署
 
@@ -300,7 +300,7 @@ docker run -p 4300:4300 visink:latest
 
 ```bash
 # 创建 Procfile
-echo "web: cd dist/server && node main.js" > Procfile
+echo "web: cd dist/visink-web && node server/main.js" > Procfile
 
 # 部署
 git push heroku main
@@ -310,20 +310,21 @@ git push heroku main
 
 - 将代码推送到 Git 仓库
 - 连接仓库并设置构建命令：`pnpm build:prod`
-- 设置启动命令：`node dist/server/main.js`
+- 设置启动命令：`cd dist/visink-web && node server/main.js`
 - 暴露端口：4300
 
 **AWS / Google Cloud / Azure：**
 
 ```bash
-# 部署 dist/server 目录
+# 部署 dist/web 目录
 # 确保已安装 Node.js 20+
 # 环境变量：NODE_ENV=production
+# 启动命令：cd dist/visink-web && node server/main.js
 ```
 
 ### 生产环境变量
 
-在 `dist/server/` 目录创建 `.env` 文件或设置环境变量：
+在 `dist/visink-web/server/` 目录创建 `.env` 文件或设置环境变量（仅用于后端）：
 
 ```env
 NODE_ENV=production
@@ -334,7 +335,7 @@ CORS_ORIGIN=https://yourdomain.com
 如使用 Docker，通过环境变量传递：
 
 ```bash
-docker run -e PORT=4300 -e NODE_ENV=production visink:latest
+docker run -e PORT=4300 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain.com visink:latest
 ```
 
 ### Electron 应用程序部署
@@ -345,21 +346,21 @@ docker run -e PORT=4300 -e NODE_ENV=production visink:latest
 
 ```bash
 pnpm build:app
-# 生成：visink-x.x.x.dmg、visink-x.x.x.zip、visink-x.x.x.tar.gz
+# 生成：dist/visink-app/visink-x.x.x.dmg、visink-x.x.x.zip、visink-x.x.x.tar.gz
 ```
 
 **Windows：**
 
 ```bash
 pnpm build:app
-# 生成：visink Setup x.x.x.exe（NSIS 安装程序）
+# 生成：dist/visink-app/visink Setup x.x.x.exe（NSIS 安装程序）
 ```
 
 **Linux：**
 
 ```bash
 pnpm build:app
-# 生成：AppImage、deb 包等
+# 生成：dist/visink-app/AppImage、deb 包等
 ```
 
 **仅构建特定平台：**

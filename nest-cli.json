@@ -5,6 +5,6 @@
   "compilerOptions": {
     "tsConfigPath": "tsconfig.server.json",
     "deleteOutDir": false,
-    "outDir": "dist/server"
+    "outDir": "dist/visink-web/server"
   }
 }

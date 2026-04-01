@@ -151,15 +151,15 @@ This creates optimized production files in the `dist/` directory.
 pnpm build:app
 ```
 
-This will create platform-specific installers in the `dist/` directory.
+This will create platform-specific installers in the `dist/visink-app/` directory.
 
 ## Deployment
 
 ### Architecture
 
 The application uses a **unified deployment model**:
-- Frontend (Vue) is built as static files → `dist/web/`
-- Backend (NestJS) is built → `dist/server/`
+- Frontend (Vue) is built as static files → `dist/visink-web/ui/`
+- Backend (NestJS) is built → `dist/visink-web/server/`
 - NestJS serves the static frontend files
 - API routes are under `/api` prefix
 - Single Node.js process serves both frontend and backend
@@ -170,8 +170,8 @@ The application uses a **unified deployment model**:
 
 | Command | Use Case | Output |
 |---------|----------|--------|
-| `pnpm build` | Development, testing | `dist/server` (code only), `dist/web` |
-| `pnpm build:prod` | Deployment | `dist/server` (code + node_modules), `dist/web` |
+| `pnpm build` | Development, testing | `dist/visink-web/server` (code only), `dist/visink-web/ui` |
+| `pnpm build:prod` | Deployment | `dist/visink-web/server` (code + node_modules), `dist/visink-web/ui` |
 
 **Development Build:**
 ```bash
@@ -188,10 +188,10 @@ pnpm build
 pnpm build:prod
 ```
 - Builds frontend and backend code
-- Copies all `node_modules` and configuration files to `dist/server/`
+- Copies all `node_modules` and configuration files to `dist/visink-web/server/`
 - Creates completely self-contained deployment package
 - Use for: production deployment, Docker images, CI/CD pipelines
-- Deploy by: uploading only `dist/server` directory
+- Deploy by: uploading only `dist/visink-web/server` directory
 
 ### When to Use Each Command
 
@@ -216,18 +216,19 @@ Since frontend and backend are deployed together, you only need to deploy the ba
 # Build for production (includes all dependencies)
 pnpm build:prod
 
-# Run the server immediately (all dependencies are included in dist/server/)
-node dist/server/main.js
+# Run the server immediately (all dependencies are included in dist/visink-web/server/)
+cd dist/visink-web && node server/main.js
 # Application available at http://localhost:4300
 ```
 
-After `pnpm build:prod`, the `dist/server/` directory is completely self-contained with:
-- Compiled backend code
-- All npm dependencies (node_modules)
-- Frontend build files
-- Configuration files (package.json, pnpm-lock.yaml)
+After `pnpm build:prod`, the `dist/web/` directory is completely self-contained:
+- `dist/visink-web/ui/` - Compiled frontend code
+- `dist/visink-web/server/` - Compiled backend code with all npm dependencies
+  - `dist/visink-web/server/node_modules/` - All dependencies
+  - `dist/visink-web/server/web/` - Copy of frontend (served by NestJS)
+  - Configuration files (package.json, pnpm-lock.yaml)
 
-Ready to deploy without any additional installation steps.
+Ready to deploy without any additional installation steps: `cd dist/visink-web && node server/main.js`
 
 #### Docker Deployment
 
@@ -248,11 +249,11 @@ RUN pnpm build:prod
 FROM node:20-alpine
 WORKDIR /app
 
-# Copy everything from dist/server (includes node_modules, no build needed)
-COPY --from=builder /app/dist/server ./
+# Copy entire dist/web directory (ui + server with node_modules)
+COPY --from=builder /app/dist/web ./
 
 EXPOSE 4300
-CMD ["node", "main.js"]
+CMD ["cd server && node main.js"]
 ```
 
 **Build and run:**
@@ -271,9 +272,9 @@ pnpm build:prod
 # Dockerfile.prod
 FROM node:20-alpine
 WORKDIR /app
-COPY dist/server ./
+COPY dist/web ./
 EXPOSE 4300
-CMD ["node", "main.js"]
+CMD ["cd server && node main.js"]
 
 # Build and run
 docker build -f Dockerfile.prod -t visink:latest .
@@ -282,14 +283,14 @@ docker run -p 4300:4300 visink:latest
 
 **Comparison:**
 - Option 1: Complete build happens in Docker container (recommended for CI/CD)
-- Option 2: Build locally, push only production artifacts (smaller image, faster deployment)
+- Option 2: Build locally, push only `dist/web` (smaller image, faster deployment)
 
 #### Cloud Platforms
 
 **Heroku:**
 ```bash
 # Create Procfile
-echo "web: cd dist/server && node main.js" > Procfile
+echo "web: cd dist/visink-web && node server/main.js" > Procfile
 
 # Deploy
 git push heroku main
@@ -298,19 +299,20 @@ git push heroku main
 **Railway / Render / Fly.io:**
 - Push your code to git repository
 - Connect repository and set build command: `pnpm build:prod`
-- Set start command: `node dist/server/main.js`
+- Set start command: `cd dist/visink-web && node server/main.js`
 - Expose port: 4300
 
 **AWS / Google Cloud / Azure:**
 ```bash
-# Deploy dist/server directory
+# Deploy dist/web directory
 # Ensure Node.js 20+ is installed
 # Environment: NODE_ENV=production
+# Start command: cd dist/visink-web && node server/main.js
 ```
 
 ### Production Environment Variables
 
-Create `.env` file in `dist/server/` or set environment variables:
+Create `.env` file in `dist/visink-web/server/` or set environment variables (for backend only):
 
 ```env
 NODE_ENV=production
@@ -320,7 +322,7 @@ CORS_ORIGIN=https://yourdomain.com
 
 If using Docker, pass via environment:
 ```bash
-docker run -e PORT=4300 -e NODE_ENV=production visink:latest
+docker run -e PORT=4300 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain.com visink:latest
 ```
 
 ### Electron App Deployment
@@ -330,19 +332,19 @@ docker run -e PORT=4300 -e NODE_ENV=production visink:latest
 **For macOS:**
 ```bash
 pnpm build:app
-# Creates: visink-x.x.x.dmg, visink-x.x.x.zip, visink-x.x.x.tar.gz
+# Creates: dist/visink-app/visink-x.x.x.dmg, visink-x.x.x.zip, visink-x.x.x.tar.gz
 ```
 
 **For Windows:**
 ```bash
 pnpm build:app
-# Creates: visink Setup x.x.x.exe (NSIS installer)
+# Creates: dist/visink-app/visink Setup x.x.x.exe (NSIS installer)
 ```
 
 **For Linux:**
 ```bash
 pnpm build:app
-# Creates: AppImage, deb package, etc.
+# Creates: dist/visink-app/AppImage, deb package, etc.
 ```
 
 **Build for specific platform only:**

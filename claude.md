@@ -94,7 +94,7 @@ pnpm install
 ### Unified Deployment Model
 
 - **Frontend & Backend Together**: Single Node.js process
-  - Frontend (Vue) → static files in `dist/web/`
+  - Frontend (Vue) → static files in `dist/visink-web/ui/`
   - Backend (NestJS) → serves API + static files
   - API prefix: `/api`
   - Frontend port: served by backend on same port
@@ -102,7 +102,7 @@ pnpm install
 ### Production Build
 
 ```bash
-pnpm build          # Builds both frontend (dist/web) and backend (dist/server)
+pnpm build          # Builds both frontend (dist/visink-web/ui) and backend (dist/visink-web/server)
 ```
 
 ### Build Commands
@@ -114,7 +114,7 @@ pnpm build          # Builds frontend + backend (no dependencies)
 
 **Production/Deployment:**
 ```bash
-pnpm build:prod     # Builds frontend + backend + copies all dependencies to dist/server/
+pnpm build:prod     # Builds frontend + backend + copies all dependencies to dist/visink-web/server/
 ```
 
 ### Quick Deploy
@@ -124,7 +124,7 @@ pnpm build:prod     # Builds frontend + backend + copies all dependencies to dis
 pnpm build:prod
 
 # Run immediately - no installation needed
-node dist/server/main.js
+cd dist/visink-web && node server/main.js
 # Access at http://localhost:4300
 ```
 
@@ -143,7 +143,7 @@ pnpm build:prod
 docker build -f Dockerfile.prod -t visink:latest .
 docker run -p 4300:4300 visink:latest
 ```
-Build locally and push only `dist/server/` to Docker (lighter image).
+Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
 
 ## Common Issues & Solutions
 
@@ -164,40 +164,48 @@ Build locally and push only `dist/server/` to Docker (lighter image).
 **After `pnpm build` (development):**
 ```
 dist/
-├── server/                    # Compiled backend code only
-│   ├── main.js
-│   ├── app.controller.js
-│   └── app.module.js
-└── web/                       # Compiled frontend
-    ├── index.html
-    ├── assets/
-    └── ...
+├── web/
+│   ├── ui/                   # Compiled frontend (Vue)
+│   │   ├── index.html
+│   │   ├── assets/
+│   │   └── ...
+│   └── server/               # Compiled backend code only (NestJS)
+│       ├── main.js
+│       ├── app.controller.js
+│       ├── app.module.js
+│       └── ...
+└── visink/visink-app/        # Electron app (from build:app)
 ```
 Use this for: development, testing. Requires `node_modules` from project root.
 
 **After `pnpm build:prod` (production):**
 ```
 dist/
-├── server/                    # Complete, self-contained backend
-│   ├── main.js               # Entry point
-│   ├── app.controller.js
-│   ├── app.module.js
-│   ├── package.json          # Copied
-│   ├── pnpm-lock.yaml        # Copied
-│   ├── node_modules/         # All dependencies (copied with hard links)
-│   │   ├── @nestjs/
-│   │   ├── express/
-│   │   └── ... (all 500+ packages)
-│   └── web/                  # Frontend build (served by NestJS)
-│       ├── index.html
-│       ├── assets/
-│       └── ...
-└── web/                       # Frontend build (original)
-    ├── index.html
-    ├── assets/
-    └── ...
+├── web/                      # Complete web application
+│   ├── ui/                   # Compiled frontend (Vue)
+│   │   ├── index.html
+│   │   ├── assets/
+│   │   └── ...
+│   └── server/               # Complete, self-contained backend
+│       ├── main.js           # Entry point
+│       ├── app.controller.js
+│       ├── app.module.js
+│       ├── package.json      # Copied
+│       ├── pnpm-lock.yaml    # Copied
+│       ├── node_modules/     # All dependencies (copied with hard links)
+│       │   ├── @nestjs/
+│       │   ├── express/
+│       │   └── ... (all 500+ packages)
+│       └── web/              # Frontend build (served by NestJS)
+│           ├── index.html
+│           ├── assets/
+│           └── ...
+└── visink/visink-app/        # Electron app installers
+    ├── visink-x.x.x.dmg      # macOS
+    ├── visink-x.x.x.exe      # Windows
+    └── ...                   # Linux packages
 ```
-Ready to deploy: `node dist/server/main.js` - no installation needed!
+Ready to deploy: `cd dist/visink-web && node server/main.js` - no installation needed!
 
 ## Contributing
 
@@ -207,10 +215,10 @@ Ready to deploy: `node dist/server/main.js` - no installation needed!
 
 ## Key Files & Scripts
 
-- `src/server/main.ts` - Configures static file serving (serves `dist/web/`)
-- `scripts/copy-deps.js` - Copies `node_modules` to `dist/server/` (called by `build:prod`)
-- `vite.web.config.ts` - Frontend build configuration (output: `dist/web/`)
-- `tsconfig.server.json` - Backend TypeScript configuration (output: `dist/server/`)
+- `src/server/main.ts` - Configures static file serving (serves `dist/visink-web/ui/`)
+- `scripts/copy-deps.js` - Copies `node_modules` to `dist/visink-web/server/` (called by `build:prod`)
+- `vite.web.config.ts` - Frontend build configuration (output: `dist/visink-web/ui/`)
+- `tsconfig.server.json` - Backend TypeScript configuration (output: `dist/visink-web/server/`)
 - `package.json` - Contains `build` (dev) and `build:prod` (deployment) commands
 
 ## License

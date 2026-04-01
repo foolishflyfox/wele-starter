@@ -22,7 +22,7 @@ function startServer(): void {
     })
   } else {
     // 生产模式：使用 fork 运行编译后的 JavaScript
-    const serverScript = join(__dirname, '../../dist/server/main.js')
+    const serverScript = join(__dirname, '../../dist/visink-web/server/main.js')
     console.log('Starting server in prod mode:', serverScript)
     serverProcess = fork(serverScript, [], {
       env: { ...process.env, PORT: '4300', NODE_ENV: 'production' },

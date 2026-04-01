@@ -4,9 +4,12 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.join(__dirname, '..')
-const distServerDir = path.join(projectRoot, 'dist', 'server')
+const distVisinkWebDir = path.join(projectRoot, 'dist', 'visink-web')
+const distServerDir = path.join(distVisinkWebDir, 'server')
+const distUiDir = path.join(distVisinkWebDir, 'ui')
 const nodeModulesDir = path.join(projectRoot, 'node_modules')
 const distNodeModulesDir = path.join(distServerDir, 'node_modules')
+const distServerWebDir = path.join(distServerDir, 'web')
 
 let copiedCount = 0
 let skippedCount = 0
@@ -73,7 +76,7 @@ function copyFile(src, dest) {
 try {
   const nodeModulesExist = fs.existsSync(distNodeModulesDir)
 
-  console.log('📦 Copying dependencies to dist/server...')
+  console.log('📦 Copying dependencies and frontend to dist/visink-web/server...')
 
   // Incremental copy: skip existing files
   console.log('  Copying node_modules...')
@@ -95,12 +98,20 @@ try {
     )
   }
 
+  // Copy web frontend build
+  if (fs.existsSync(distUiDir)) {
+    console.log('  Copying frontend to server/web...')
+    copyDirSync(distUiDir, distServerWebDir, true)
+  } else {
+    console.warn('  ⚠️  Warning: dist/visink-web/ui not found. Run pnpm build:ui first.')
+  }
+
   console.log('✅ Dependencies copied successfully!')
   console.log(`   📊 Copied: ${copiedCount} files | Skipped: ${skippedCount} files`)
   if (nodeModulesExist && skippedCount > 0) {
     console.log('   ⚡ Incremental copy completed (reused existing files)')
   }
-  console.log(`🚀 Ready to deploy: node ${distServerDir}/main.js`)
+  console.log(`🚀 Ready to deploy: cd ${distVisinkWebDir} && node server/main.js`)
 } catch (error) {
   console.error('❌ Error copying dependencies:', error.message)
   process.exit(1)

@@ -5,7 +5,7 @@ import { resolve } from "path";
 export default defineConfig({
   root: "src/renderer",
   build: {
-    outDir: resolve(__dirname, "dist/web"),
+    outDir: resolve(__dirname, "dist/visink-web/ui"),
     emptyOutDir: true,
     rollupOptions: {
       input: resolve(__dirname, "src/renderer/index.html"),
