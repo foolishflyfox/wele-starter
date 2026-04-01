@@ -93,12 +93,14 @@ visink/
 ## Available Scripts
 
 ### 🔧 Development
+
 ```bash
 pnpm dev              # Start web dev (frontend + backend concurrently)
 pnpm dev:app          # Start Electron dev mode
 ```
 
 ### 🏗️ Building
+
 ```bash
 pnpm build            # Build web (output: dist/visink-web/)
 pnpm build:prod       # Build for production (output: dist/visink-web/ with dependencies)
@@ -110,6 +112,7 @@ pnpm build:ui         # Build frontend only
 ```
 
 ### ✨ Code Quality
+
 ```bash
 pnpm lint             # Run ESLint
 pnpm format           # Format with Prettier
@@ -117,17 +120,18 @@ pnpm typecheck        # TypeScript type checking
 ```
 
 ### 📦 Distribution
+
 ```bash
 pnpm copy:deps        # Copy dependencies to dist/visink-web/server/ (used by build:prod)
 ```
 
 ### 🔍 Quick Reference
 
-| Command | Output | Size | Use Case |
-|---------|--------|------|----------|
-| `pnpm build` | `dist/visink-web/` (code only) | ~100 KB | Development, testing |
-| `pnpm build:prod` | `dist/visink-web/` (prod deps only) | **~150-250 MB** ⬇️ | Production server deployment |
-| `pnpm build:app` | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB | Electron app release |
+| Command           | Output                                  | Size               | Use Case                     |
+| ----------------- | --------------------------------------- | ------------------ | ---------------------------- |
+| `pnpm build`      | `dist/visink-web/` (code only)          | ~100 KB            | Development, testing         |
+| `pnpm build:prod` | `dist/visink-web/` (prod deps only)     | **~150-250 MB** ⬇️ | Production server deployment |
+| `pnpm build:app`  | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB        | Electron app release         |
 
 ## Recommended IDE Setup
 
@@ -138,18 +142,18 @@ pnpm copy:deps        # Copy dependencies to dist/visink-web/server/ (used by bu
 
 ## Configuration Files
 
-| File | Purpose | Output Path |
-|------|---------|-------------|
-| `vite.web.config.ts` | Frontend build configuration | `dist/visink-web/ui/` |
-| `nest-cli.json` | NestJS build configuration | `dist/visink-web/server/` |
-| `tsconfig.server.json` | Backend TypeScript config | `dist/visink-web/server/` |
-| `tsconfig.web.json` | Frontend TypeScript config | `dist/visink-web/ui/` |
-| `electron.vite.config.ts` | Electron build configuration | `out/main`, `out/preload`, `out/renderer` |
-| `electron-builder.yml` | Electron app packaging config | `dist/visink-app/` |
-| `scripts/copy-deps.js` | Dependency copying script | `dist/visink-web/server/` |
-| `.prettierrc.yaml` | Code formatting rules | - |
-| `eslint.config.mjs` | Linting rules | - |
-| `tsconfig.json` | Main TypeScript configuration | - |
+| File                      | Purpose                       | Output Path                               |
+| ------------------------- | ----------------------------- | ----------------------------------------- |
+| `vite.web.config.ts`      | Frontend build configuration  | `dist/visink-web/ui/`                     |
+| `nest-cli.json`           | NestJS build configuration    | `dist/visink-web/server/`                 |
+| `tsconfig.server.json`    | Backend TypeScript config     | `dist/visink-web/server/`                 |
+| `tsconfig.web.json`       | Frontend TypeScript config    | `dist/visink-web/ui/`                     |
+| `electron.vite.config.ts` | Electron build configuration  | `out/main`, `out/preload`, `out/renderer` |
+| `electron-builder.yml`    | Electron app packaging config | `dist/visink-app/`                        |
+| `scripts/copy-deps.js`    | Dependency copying script     | `dist/visink-web/server/`                 |
+| `.prettierrc.yaml`        | Code formatting rules         | -                                         |
+| `eslint.config.mjs`       | Linting rules                 | -                                         |
+| `tsconfig.json`           | Main TypeScript configuration | -                                         |
 
 ## Building for Distribution
 
@@ -174,6 +178,7 @@ This will create platform-specific installers in the `dist/visink-app/` director
 ### Architecture
 
 The application uses a **unified deployment model**:
+
 - Frontend (Vue) is built as static files → `dist/visink-web/ui/`
 - Backend (NestJS) is built → `dist/visink-web/server/`
 - NestJS serves the static frontend files
@@ -184,15 +189,17 @@ The application uses a **unified deployment model**:
 
 ### Build Commands
 
-| Command | Use Case | Output |
-|---------|----------|--------|
-| `pnpm build` | Development, testing | `dist/visink-web/server` (code only), `dist/visink-web/ui` |
-| `pnpm build:prod` | Deployment | `dist/visink-web/server` (code + prod deps), `dist/visink-web/ui` |
+| Command           | Use Case             | Output                                                            |
+| ----------------- | -------------------- | ----------------------------------------------------------------- |
+| `pnpm build`      | Development, testing | `dist/visink-web/server` (code only), `dist/visink-web/ui`        |
+| `pnpm build:prod` | Deployment           | `dist/visink-web/server` (code + prod deps), `dist/visink-web/ui` |
 
 **Development Build:**
+
 ```bash
 pnpm build
 ```
+
 - Builds frontend and backend code
 - Output in `dist/` directory
 - **No dependencies copied** - requires `node_modules` from project root
@@ -200,9 +207,11 @@ pnpm build
 - Deploy by: uploading entire project with `node_modules`
 
 **Production Build (Deployment):**
+
 ```bash
 pnpm build:prod
 ```
+
 - Builds frontend and backend code
 - Copies all `node_modules` and configuration files to `dist/visink-web/server/`
 - Creates completely self-contained deployment package
@@ -212,12 +221,14 @@ pnpm build:prod
 ### When to Use Each Command
 
 **Use `pnpm build` when:**
+
 - Developing or testing locally
 - Running tests against built code
 - Want to minimize build time during development
 - Output: `dist/visink-web/` with `ui/` and `server/` (requires project `node_modules`)
 
 **Use `pnpm build:prod` when:**
+
 - Preparing code for production deployment
 - Building Docker images
 - Deploying to cloud platforms (Heroku, Railway, AWS, etc.)
@@ -225,6 +236,7 @@ pnpm build:prod
 - Output: `dist/visink-web/` with all dependencies included in `server/`
 
 **Use `pnpm build:app` when:**
+
 - Releasing Electron desktop application
 - Creating platform-specific installers (DMG, EXE, AppImage, etc.)
 - Output: `dist/visink-app/` with installers + `dist/visink-web/` for internal use
@@ -245,6 +257,7 @@ cd dist/visink-web && node server/main.js
 ```
 
 After `pnpm build:prod`, the `dist/visink-web/` directory is completely self-contained:
+
 - `dist/visink-web/ui/` - Compiled frontend code
 - `dist/visink-web/server/` - Compiled backend with production dependencies only
   - `dist/visink-web/server/node_modules/` - **Production dependencies only** (~150-250 MB)
@@ -284,6 +297,7 @@ CMD ["cd server && node main.js"]
 ```
 
 **Build and run:**
+
 ```bash
 docker build -t visink:latest .
 docker run -p 4300:4300 visink:latest
@@ -309,12 +323,14 @@ docker run -p 4300:4300 visink:latest
 ```
 
 **Comparison:**
+
 - Option 1: Complete build happens in Docker container (recommended for CI/CD)
 - Option 2: Build locally, push only `dist/web` (smaller image, faster deployment)
 
 #### Cloud Platforms
 
 **Heroku:**
+
 ```bash
 # Create Procfile
 echo "web: cd dist/visink-web && node server/main.js" > Procfile
@@ -324,12 +340,14 @@ git push heroku main
 ```
 
 **Railway / Render / Fly.io:**
+
 - Push your code to git repository
 - Connect repository and set build command: `pnpm build:prod`
 - Set start command: `cd dist/visink-web && node server/main.js`
 - Expose port: 4300
 
 **AWS / Google Cloud / Azure:**
+
 ```bash
 # Deploy dist/web directory
 # Ensure Node.js 20+ is installed
@@ -348,6 +366,7 @@ CORS_ORIGIN=https://yourdomain.com
 ```
 
 If using Docker, pass via environment:
+
 ```bash
 docker run -e PORT=4300 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain.com visink:latest
 ```
@@ -357,24 +376,28 @@ docker run -e PORT=4300 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain
 #### Building for Specific Platforms
 
 **For macOS:**
+
 ```bash
 pnpm build:app
 # Creates: dist/visink-app/visink-x.x.x.dmg, visink-x.x.x.zip, visink-x.x.x.tar.gz
 ```
 
 **For Windows:**
+
 ```bash
 pnpm build:app
 # Creates: dist/visink-app/visink Setup x.x.x.exe (NSIS installer)
 ```
 
 **For Linux:**
+
 ```bash
 pnpm build:app
 # Creates: dist/visink-app/AppImage, deb package, etc.
 ```
 
 **Build for specific platform only:**
+
 ```bash
 # macOS
 electron-builder --mac

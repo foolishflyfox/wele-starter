@@ -38,6 +38,7 @@ pnpm install
 ### Development Commands
 
 - **Web Development** (Frontend + Backend):
+
   ```bash
   pnpm dev          # Runs web UI + NestJS server concurrently
   pnpm dev:ui       # Vue development server only (port 5173)
@@ -45,6 +46,7 @@ pnpm install
   ```
 
 - **Electron Development**:
+
   ```bash
   pnpm dev:app      # Electron dev mode
   ```
@@ -59,11 +61,13 @@ pnpm install
 ### Building
 
 - **Web Build**:
+
   ```bash
   pnpm build        # Build server + UI
   ```
 
 - **Electron App**:
+
   ```bash
   pnpm build:app    # Build complete Electron application
   ```
@@ -108,6 +112,7 @@ pnpm build          # Builds both frontend (dist/visink-web/ui) and backend (dis
 ### Build Commands
 
 **Development Build:**
+
 ```bash
 pnpm build          # Builds: pnpm build:server + pnpm build:ui
                     # Output: dist/visink-web/ui/ + dist/visink-web/server/
@@ -115,6 +120,7 @@ pnpm build          # Builds: pnpm build:server + pnpm build:ui
 ```
 
 **Production Build:**
+
 ```bash
 pnpm build:prod     # Builds: pnpm build:server + pnpm build:ui + pnpm copy:deps
                     # Output: dist/visink-web/ with all dependencies
@@ -122,6 +128,7 @@ pnpm build:prod     # Builds: pnpm build:server + pnpm build:ui + pnpm copy:deps
 ```
 
 **Electron App Build:**
+
 ```bash
 pnpm build:app      # Builds: pnpm build:ui + pnpm build:server + electron-vite + electron-builder
                     # Output: dist/visink-app/ (installers) + dist/visink-web/
@@ -142,18 +149,22 @@ cd dist/visink-web && node server/main.js
 ### Docker Deployment
 
 **Option 1: Build in Docker (recommended for CI/CD)**
+
 ```bash
 docker build -t visink:latest .
 docker run -p 4300:4300 visink:latest
 ```
+
 Uses `pnpm build:prod` in Dockerfile. See README.md for template.
 
 **Option 2: Build locally, deploy to Docker**
+
 ```bash
 pnpm build:prod
 docker build -f Dockerfile.prod -t visink:latest .
 docker run -p 4300:4300 visink:latest
 ```
+
 Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
 
 ## Common Issues & Solutions
@@ -173,6 +184,7 @@ Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
 ### Build Output Structure
 
 **After `pnpm build` (development):**
+
 ```
 dist/
 └── visink-web/              # Web app package
@@ -188,9 +200,11 @@ dist/
         ├── app.module.js
         └── ... (other files)
 ```
+
 Use for: development, testing. Requires `node_modules` from project root.
 
 **After `pnpm build:prod` (production):**
+
 ```
 dist/
 └── visink-web/              # Complete self-contained web app
@@ -211,9 +225,11 @@ dist/
         │   └── assets/
         └── ... (other files)
 ```
+
 Ready to deploy: `cd dist/visink-web && node server/main.js` - no installation needed!
 
 **After `pnpm build:app` (Electron app):**
+
 ```
 dist/
 ├── visink-web/              # Web app (same as pnpm build)
@@ -232,6 +248,7 @@ out/                         # Electron build artifacts
 ├── preload/                 # Preload script compiled
 └── renderer/                # Renderer process compiled
 ```
+
 Ready to deploy: Double-click installer or app bundle!
 
 ## Contributing

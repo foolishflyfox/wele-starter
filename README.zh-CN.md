@@ -93,12 +93,14 @@ visink/
 ## 可用的脚本命令
 
 ### 🔧 开发
+
 ```bash
 pnpm dev              # 启动 Web 开发（前端 + 后端并发）
 pnpm dev:app          # 启动 Electron 开发模式
 ```
 
 ### 🏗️ 构建
+
 ```bash
 pnpm build            # 构建 Web（输出：dist/visink-web/）
 pnpm build:prod       # 生产构建（输出：dist/visink-web/ 包含依赖）
@@ -110,6 +112,7 @@ pnpm build:ui         # 仅构建前端
 ```
 
 ### ✨ 代码质量
+
 ```bash
 pnpm lint             # 运行 ESLint
 pnpm format           # 使用 Prettier 格式化
@@ -117,17 +120,18 @@ pnpm typecheck        # TypeScript 类型检查
 ```
 
 ### 📦 分发
+
 ```bash
 pnpm copy:deps        # 复制依赖到 dist/visink-web/server/（build:prod 使用）
 ```
 
 ### 🔍 快速参考
 
-| 命令 | 输出 | 大小 | 用途 |
-|------|------|------|------|
-| `pnpm build` | `dist/visink-web/`（仅代码） | ~100 KB | 开发、测试 |
-| `pnpm build:prod` | `dist/visink-web/`（含依赖） | ~500+ MB | 生产服务器部署 |
-| `pnpm build:app` | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB | Electron 应用发布 |
+| 命令              | 输出                                    | 大小        | 用途              |
+| ----------------- | --------------------------------------- | ----------- | ----------------- |
+| `pnpm build`      | `dist/visink-web/`（仅代码）            | ~100 KB     | 开发、测试        |
+| `pnpm build:prod` | `dist/visink-web/`（含依赖）            | ~500+ MB    | 生产服务器部署    |
+| `pnpm build:app`  | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB | Electron 应用发布 |
 
 ## 推荐的 IDE 设置
 
@@ -138,18 +142,18 @@ pnpm copy:deps        # 复制依赖到 dist/visink-web/server/（build:prod 使
 
 ## 配置文件说明
 
-| 文件 | 用途 | 输出路径 |
-|------|------|---------|
-| `vite.web.config.ts` | 前端构建配置 | `dist/visink-web/ui/` |
-| `nest-cli.json` | NestJS 构建配置 | `dist/visink-web/server/` |
-| `tsconfig.server.json` | 后端 TypeScript 配置 | `dist/visink-web/server/` |
-| `tsconfig.web.json` | 前端 TypeScript 配置 | `dist/visink-web/ui/` |
-| `electron.vite.config.ts` | Electron 构建配置 | `out/main`、`out/preload`、`out/renderer` |
-| `electron-builder.yml` | Electron 应用打包配置 | `dist/visink-app/` |
-| `scripts/copy-deps.js` | 依赖复制脚本 | `dist/visink-web/server/` |
-| `.prettierrc.yaml` | 代码格式化规则 | - |
-| `eslint.config.mjs` | 代码检查规则 | - |
-| `tsconfig.json` | 主 TypeScript 配置 | - |
+| 文件                      | 用途                  | 输出路径                                  |
+| ------------------------- | --------------------- | ----------------------------------------- |
+| `vite.web.config.ts`      | 前端构建配置          | `dist/visink-web/ui/`                     |
+| `nest-cli.json`           | NestJS 构建配置       | `dist/visink-web/server/`                 |
+| `tsconfig.server.json`    | 后端 TypeScript 配置  | `dist/visink-web/server/`                 |
+| `tsconfig.web.json`       | 前端 TypeScript 配置  | `dist/visink-web/ui/`                     |
+| `electron.vite.config.ts` | Electron 构建配置     | `out/main`、`out/preload`、`out/renderer` |
+| `electron-builder.yml`    | Electron 应用打包配置 | `dist/visink-app/`                        |
+| `scripts/copy-deps.js`    | 依赖复制脚本          | `dist/visink-web/server/`                 |
+| `.prettierrc.yaml`        | 代码格式化规则        | -                                         |
+| `eslint.config.mjs`       | 代码检查规则          | -                                         |
+| `tsconfig.json`           | 主 TypeScript 配置    | -                                         |
 
 ## 为发布构建应用
 
@@ -185,8 +189,8 @@ pnpm build:app
 
 #### 构建命令说明
 
-| 命令              | 用途       | 输出                                             |
-| ----------------- | ---------- | ------------------------------------------------ |
+| 命令              | 用途       | 输出                                                                  |
+| ----------------- | ---------- | --------------------------------------------------------------------- |
 | `pnpm build`      | 开发、测试 | `dist/visink-web/server`（仅代码）、`dist/visink-web/ui`              |
 | `pnpm build:prod` | 部署       | `dist/visink-web/server`（代码 + node_modules）、`dist/visink-web/ui` |
 
@@ -253,6 +257,7 @@ cd dist/visink-web && node server/main.js
 ```
 
 执行 `pnpm build:prod` 后，`dist/web/` 目录完全独立：
+
 - `dist/visink-web/ui/` - 编译后的前端代码
 - `dist/visink-web/server/` - 包含所有依赖的编译后端代码
   - `dist/visink-web/server/node_modules/` - 所有依赖

@@ -29,26 +29,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const result = ref<Record<string, string> | null>(null)
-const loading = ref(false)
-const error = ref<string | null>(null)
+const result = ref<Record<string, string> | null>(null);
+const loading = ref(false);
+const error = ref<string | null>(null);
 
 const fetchHello = async (): Promise<void> => {
-  loading.value = true
-  error.value = null
+  loading.value = true;
+  error.value = null;
   try {
-    const response = await fetch('/api/hello')
+    const response = await fetch('/api/hello');
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    result.value = await response.json()
+    result.value = await response.json();
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Unknown error'
-    result.value = null
+    error.value = err instanceof Error ? err.message : 'Unknown error';
+    result.value = null;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
