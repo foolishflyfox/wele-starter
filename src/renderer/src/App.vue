@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import TsxCounter from './TsxCounter.vue';
 
 const result = ref<Record<string, string> | null>(null);

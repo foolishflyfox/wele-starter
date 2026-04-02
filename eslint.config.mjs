@@ -3,11 +3,27 @@ import tseslint from '@electron-toolkit/eslint-config-ts';
 import eslintConfigPrettier from '@electron-toolkit/eslint-config-prettier';
 import eslintPluginVue from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+function loadAutoImportGlobals() {
+  try {
+    return require('./src/renderer/src/auto/lint/.eslintrc-auto-import.json').globals;
+  } catch {
+    return {};
+  }
+}
 
 export default defineConfig(
   { ignores: ['**/node_modules', '**/dist', '**/out', 'scripts/**'] },
   tseslint.configs.recommended,
   eslintPluginVue.configs['flat/recommended'],
+  {
+    files: ['src/renderer/**/*.{ts,tsx,vue}'],
+    languageOptions: {
+      globals: loadAutoImportGlobals()
+    }
+  },
   {
     files: ['**/*.vue'],
     languageOptions: {

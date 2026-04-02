@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
 import unocss from 'unocss/vite';
+import autoImport from 'unplugin-auto-import/vite';
 
 export default defineConfig({
   main: {
@@ -29,7 +30,27 @@ export default defineConfig({
         '@': resolve(__dirname, 'src/renderer/src')
       }
     },
-    plugins: [unocss(), vue(), vueJsx(), vueDevTools()],
+    plugins: [
+      unocss(),
+      autoImport({
+        imports: [
+          'vue',
+          'vue-router',
+          'pinia',
+          {
+            'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar']
+          }
+        ],
+        dts: 'src/auto/types/auto-imports.d.ts',
+        eslintrc: {
+          enabled: true,
+          filepath: 'src/renderer/src/auto/lint/.eslintrc-auto-import.json'
+        }
+      }),
+      vue(),
+      vueJsx(),
+      vueDevTools()
+    ],
     server: {
       port: 4030,
       proxy: {
