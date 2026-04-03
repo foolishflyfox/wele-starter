@@ -20,6 +20,7 @@
     "build:prod": "pnpm build:server && pnpm build:ui && pnpm copy:deps",
     "build:app": "pnpm build:ui && pnpm build:server && electron-vite build && electron-builder",
     "build:win": "pnpm build:ui && pnpm build:server && electron-vite build && electron-builder --win",
+    "build:linux": "pnpm build:ui && pnpm build:server && electron-vite build && electron-builder --linux",
     "build:server": "nest build",
     "build:ui": "vite build --config vite.web.config.ts",
     "copy:deps": "node scripts/copy-deps.js",
