@@ -12,11 +12,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    NaiveProvider: typeof import('./../../components/NaiveProvider.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
   }
 }
 
 // For TSX support
 declare global {
+  const NaiveProvider: typeof import('./../../components/NaiveProvider.vue')['default']
   const NButton: typeof import('naive-ui')['NButton']
 }
