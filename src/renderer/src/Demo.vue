@@ -32,7 +32,7 @@
     <p>{{ error }}</p>
   </div>
 
-  <hr class="my-1em" />
+  <hr class="my-1em border-t border-#e8e8e8 w-full" />
   <h3>TSX Demo</h3>
   <TsxCounter />
 </template>

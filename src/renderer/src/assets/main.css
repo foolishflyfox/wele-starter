@@ -25,11 +25,7 @@ code {
 }
 
 #app {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-bottom: 80px;
+  height: 100%;
 }
 
 .logo {

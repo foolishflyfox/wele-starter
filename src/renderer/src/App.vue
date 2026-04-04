@@ -1,6 +1,8 @@
 <template>
   <NaiveProvider>
-    <Demo />
+    <div class="flex flex-col items-center justify-center mb-80px">
+      <Demo />
+    </div>
   </NaiveProvider>
 </template>
 
