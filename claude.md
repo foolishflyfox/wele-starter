@@ -11,6 +11,14 @@
 - **Desktop**: Electron + electron-vite
 - **Package Manager**: pnpm
 - **Code Quality**: ESLint + Prettier + TypeScript
+- **UI Library**: Naive UI（通过 `unplugin-vue-components` + `NaiveUiResolver` 按需自动引入）
+
+## Coding Conventions
+
+### Naive UI
+
+- SFC `<template>` 中使用大驼峰命名，例如 `<NButton>`、`<NInput>`，不使用 kebab-case（如 `<n-button>`）
+- 组件无需手动 import，由 `unplugin-vue-components` 自动按需引入
 
 ### Project Structure
 

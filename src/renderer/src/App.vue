@@ -10,12 +10,14 @@
   <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
   <div class="actions">
     <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
+      <NButton tag="a" href="https://electron-vite.org/" target="_blank" rel="noreferrer">
+        Documentation
+      </NButton>
     </div>
     <div class="action">
-      <button :disabled="loading" @click="fetchHello">
+      <NButton :disabled="loading" @click="fetchHello">
         {{ loading ? 'Loading...' : 'Call API Hello' }}
-      </button>
+      </NButton>
     </div>
   </div>
   <div v-if="result" class="result">
