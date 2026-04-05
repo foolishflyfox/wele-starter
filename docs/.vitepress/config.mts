@@ -4,13 +4,20 @@ import { dirname, resolve } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1];
+const base = isGithubPages && repoName ? `/${repoName}/` : '/docs/';
+const outDir = isGithubPages
+  ? resolve(__dirname, '../dist')
+  : resolve(__dirname, '../../src/renderer/public/docs');
+
 export default defineConfig({
   title: 'Visink',
   description: 'Visink 项目文档',
   lang: 'zh-CN',
-  base: '/docs/',
-  outDir: resolve(__dirname, '../../src/renderer/public/docs'),
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/docs/favicon.svg' }]],
+  base,
+  outDir,
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }]],
   themeConfig: {
     siteTitle: 'Visink 文档',
     search: {
