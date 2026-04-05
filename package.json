@@ -16,6 +16,7 @@
     "dev:server": "nest start --watch",
     "dev:ui": "vite --config vite.web.config.ts",
     "dev:web": "concurrently -k \"pnpm dev:server\" \"pnpm dev:ui\"",
+    "predev:app": "test -d src/renderer/public/docs || pnpm docs:build",
     "dev:app": "NODE_ENV=development electron-vite dev",
     "build": "pnpm check && pnpm build:server && pnpm build:ui",
     "build:prod": "pnpm build:server && pnpm build:ui && pnpm copy:deps",

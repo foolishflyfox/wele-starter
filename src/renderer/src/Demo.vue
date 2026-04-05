@@ -23,7 +23,7 @@
       <NButton type="success" @click="showSuccess">Show Success</NButton>
     </div>
     <div class="action">
-      <NButton tag="a" href="/docs/" target="_blank">帮助文档</NButton>
+      <NButton @click="openDocs">帮助文档</NButton>
     </div>
   </div>
   <div v-if="result" class="result">
@@ -66,5 +66,14 @@ const fetchHello = async (): Promise<void> => {
 
 const showSuccess = () => {
   window.$message.success('操作成功！');
+};
+
+const openDocs = () => {
+  const url = 'http://localhost:4030/docs/';
+  if (window.electron) {
+    window.electron.shell.openExternal(url);
+  } else {
+    window.open(url, '_blank');
+  }
 };
 </script>
