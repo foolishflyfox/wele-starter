@@ -52,6 +52,10 @@ function createWindow(): void {
     }
   });
 
+  // 页面及所有资源（CSS、JS）都来自 NestJS HTTP 服务，而不是 file:// 协议
+  // 这是一种 "Electron 内嵌 Web Server" 的架构模式，优点是前后端共用同一套代码
+  // Web 部署和 Electron 打包产物完全一致；
+  // 代价是 Electron 必须依赖内置的 NestJS 服务才能运行，无法完全离线。
   const startUrl = isDev ? 'http://localhost:4030' : 'http://localhost:4300';
 
   mainWindow.loadURL(startUrl);
