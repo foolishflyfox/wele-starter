@@ -35,7 +35,10 @@ export default defineConfig({
       '/guide/': [
         {
           text: '指南',
-          items: [{ text: '介绍', link: '/guide/intro' }]
+          items: [
+            { text: '介绍', link: '/guide/intro' },
+            { text: '文件结构', link: '/guide/structure' }
+          ]
         }
       ]
     },
