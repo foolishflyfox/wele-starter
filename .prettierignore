@@ -5,3 +5,5 @@ LICENSE.md
 tsconfig.json
 tsconfig.*.json
 src/renderer/src/auto/
+src/renderer/public/docs/
+docs/.vitepress/cache/

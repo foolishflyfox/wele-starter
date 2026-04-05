@@ -11,6 +11,7 @@
     "lint": "eslint --cache --cache-strategy content .",
     "typecheck": "vue-tsc -p tsconfig.web.json --noEmit",
     "check": "pnpm format && pnpm lint && pnpm typecheck",
+    "predev": "test -d src/renderer/public/docs || pnpm docs:build",
     "dev": "pnpm dev:web",
     "dev:server": "nest start --watch",
     "dev:ui": "vite --config vite.web.config.ts",

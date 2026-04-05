@@ -8,5 +8,5 @@ out
 tmp
 
 # VitePress
-docs/.vitepress/dist
 docs/.vitepress/cache
+src/renderer/public/docs

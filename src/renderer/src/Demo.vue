@@ -22,6 +22,9 @@
     <div class="action">
       <NButton type="success" @click="showSuccess">Show Success</NButton>
     </div>
+    <div class="action">
+      <NButton tag="a" href="/docs/" target="_blank">帮助文档</NButton>
+    </div>
   </div>
   <div v-if="result" class="result">
     <h3>API Response:</h3>

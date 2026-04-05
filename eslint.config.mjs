@@ -15,7 +15,16 @@ function loadAutoImportGlobals() {
 }
 
 export default defineConfig(
-  { ignores: ['**/node_modules', '**/dist', '**/out', 'scripts/**'] },
+  {
+    ignores: [
+      '**/node_modules',
+      '**/dist',
+      '**/out',
+      'scripts/**',
+      'src/renderer/public/docs/**',
+      'docs/.vitepress/cache/**'
+    ]
+  },
   tseslint.configs.recommended,
   eslintPluginVue.configs['flat/recommended'],
   {

@@ -1,10 +1,16 @@
 import { defineConfig } from 'vitepress';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   title: 'Visink',
   description: 'Visink 项目文档',
   lang: 'zh-CN',
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
+  base: '/docs/',
+  outDir: resolve(__dirname, '../../src/renderer/public/docs'),
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/docs/favicon.svg' }]],
   themeConfig: {
     siteTitle: 'Visink 文档',
     search: {

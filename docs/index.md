@@ -2,8 +2,8 @@
 layout: home
 
 hero:
-  name: "Visink"
-  text: "现代桌面应用"
+  name: 'Visink'
+  text: '现代桌面应用'
   tagline: 基于 Electron + Vue 3 + TypeScript + NestJS 构建的跨平台桌面应用
   image:
     src: /favicon.svg
