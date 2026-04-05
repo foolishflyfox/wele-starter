@@ -5,6 +5,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
 import unocss from 'unocss/vite';
 import autoImport from 'unplugin-auto-import/vite';
+import components from 'unplugin-vue-components/vite';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
   main: {
@@ -46,6 +48,10 @@ export default defineConfig({
           enabled: true,
           filepath: 'src/renderer/src/auto/lint/.eslintrc-auto-import.json'
         }
+      }),
+      components({
+        resolvers: [NaiveUiResolver()],
+        dts: 'src/auto/types/components.d.ts'
       }),
       vue(),
       vueJsx(),
