@@ -65,15 +65,10 @@ const fetchHello = async (): Promise<void> => {
 };
 
 const showSuccess = () => {
-  window.$message.success('操作成功！');
+  window.$message.success(`window.location.origin = ${window.location.origin}`);
 };
 
 const openDocs = () => {
-  const url = 'http://localhost:4030/docs/';
-  if (window.electron) {
-    window.electron.shell.openExternal(url);
-  } else {
-    window.open(url, '_blank');
-  }
+  window.open(`${window.location.origin}/docs/`, '_blank');
 };
 </script>
