@@ -13,7 +13,7 @@ const distServerWebDir = path.join(distServerDir, 'web');
 let copiedCount = 0;
 let skippedCount = 0;
 
-function copyDirSync(src, dest, skipExisting = false) {
+function copyDirSync(src: string, dest: string, skipExisting = false): void {
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest, { recursive: true });
   }
@@ -43,7 +43,7 @@ function copyDirSync(src, dest, skipExisting = false) {
       try {
         // Try hard link first (same filesystem, much faster)
         fs.linkSync(srcPath, destPath);
-      } catch (err) {
+      } catch {
         // Fall back to copy if hard link fails (different filesystem)
         fs.copyFileSync(srcPath, destPath);
       }
@@ -52,7 +52,7 @@ function copyDirSync(src, dest, skipExisting = false) {
   }
 }
 
-function copyFile(src, dest) {
+function copyFile(src: string, dest: string): void {
   const dir = path.dirname(dest);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -95,7 +95,7 @@ try {
     });
     console.log('  ✅ Production dependencies installed');
   } catch (err) {
-    console.error('  ❌ Failed to install dependencies:', err.message);
+    console.error('  ❌ Failed to install dependencies:', (err as Error).message);
     console.log('  💡 Falling back to copying node_modules from project root...');
 
     // Fallback: copy node_modules if pnpm install fails
@@ -126,6 +126,6 @@ try {
   }
   console.log(`🚀 Ready to deploy: cd ${distVisinkWebDir} && node server/main.js`);
 } catch (error) {
-  console.error('❌ Error during setup:', error.message);
+  console.error('❌ Error during setup:', (error as Error).message);
   process.exit(1);
 }
