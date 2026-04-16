@@ -1,4 +1,4 @@
-# Visink
+# Wele Starter
 
 An Electron application with Vue 3, TypeScript, and NestJS backend.
 
@@ -75,7 +75,7 @@ pnpm typecheck
 ## Project Structure
 
 ```
-visink/
+wele-starter/
 ├── src/
 │   ├── main/          # Electron main process
 │   ├── preload/       # Electron preload scripts
@@ -102,9 +102,9 @@ pnpm dev:app          # Start Electron dev mode
 ### 🏗️ Building
 
 ```bash
-pnpm build            # Build web (output: dist/visink-web/)
-pnpm build:prod       # Build for production (output: dist/visink-web/ with dependencies)
-pnpm build:app        # Build Electron app (output: dist/visink-app/ + dist/visink-web/)
+pnpm build            # Build web (output: dist/wele-starter-web/)
+pnpm build:prod       # Build for production (output: dist/wele-starter-web/ with dependencies)
+pnpm build:app        # Build Electron app (output: dist/wele-starter-app/ + dist/wele-starter-web/)
 
 # Advanced (rarely used directly)
 pnpm build:server     # Build backend only
@@ -122,16 +122,16 @@ pnpm typecheck        # TypeScript type checking
 ### 📦 Distribution
 
 ```bash
-pnpm copy:deps        # Copy dependencies to dist/visink-web/server/ (used by build:prod)
+pnpm copy:deps        # Copy dependencies to dist/wele-starter-web/server/ (used by build:prod)
 ```
 
 ### 🔍 Quick Reference
 
-| Command           | Output                                  | Size               | Use Case                     |
-| ----------------- | --------------------------------------- | ------------------ | ---------------------------- |
-| `pnpm build`      | `dist/visink-web/` (code only)          | ~100 KB            | Development, testing         |
-| `pnpm build:prod` | `dist/visink-web/` (prod deps only)     | **~150-250 MB** ⬇️ | Production server deployment |
-| `pnpm build:app`  | `dist/visink-app/` + `dist/visink-web/` | ~100-200 MB        | Electron app release         |
+| Command           | Output                                              | Size               | Use Case                     |
+| ----------------- | --------------------------------------------------- | ------------------ | ---------------------------- |
+| `pnpm build`      | `dist/wele-starter-web/` (code only)                | ~100 KB            | Development, testing         |
+| `pnpm build:prod` | `dist/wele-starter-web/` (prod deps only)           | **~150-250 MB** ⬇️ | Production server deployment |
+| `pnpm build:app`  | `dist/wele-starter-app/` + `dist/wele-starter-web/` | ~100-200 MB        | Electron app release         |
 
 ## Recommended IDE Setup
 
@@ -144,13 +144,13 @@ pnpm copy:deps        # Copy dependencies to dist/visink-web/server/ (used by bu
 
 | File                      | Purpose                       | Output Path                               |
 | ------------------------- | ----------------------------- | ----------------------------------------- |
-| `vite.web.config.ts`      | Frontend build configuration  | `dist/visink-web/ui/`                     |
-| `nest-cli.json`           | NestJS build configuration    | `dist/visink-web/server/`                 |
-| `tsconfig.server.json`    | Backend TypeScript config     | `dist/visink-web/server/`                 |
-| `tsconfig.web.json`       | Frontend TypeScript config    | `dist/visink-web/ui/`                     |
+| `vite.web.config.ts`      | Frontend build configuration  | `dist/wele-starter-web/ui/`               |
+| `nest-cli.json`           | NestJS build configuration    | `dist/wele-starter-web/server/`           |
+| `tsconfig.server.json`    | Backend TypeScript config     | `dist/wele-starter-web/server/`           |
+| `tsconfig.web.json`       | Frontend TypeScript config    | `dist/wele-starter-web/ui/`               |
 | `electron.vite.config.ts` | Electron build configuration  | `out/main`, `out/preload`, `out/renderer` |
-| `electron-builder.yml`    | Electron app packaging config | `dist/visink-app/`                        |
-| `scripts/copy-deps.js`    | Dependency copying script     | `dist/visink-web/server/`                 |
+| `electron-builder.yml`    | Electron app packaging config | `dist/wele-starter-app/`                  |
+| `scripts/copy-deps.js`    | Dependency copying script     | `dist/wele-starter-web/server/`           |
 | `.prettierrc.yaml`        | Code formatting rules         | -                                         |
 | `eslint.config.mjs`       | Linting rules                 | -                                         |
 | `tsconfig.json`           | Main TypeScript configuration | -                                         |
@@ -171,7 +171,7 @@ This creates optimized production files in the `dist/` directory.
 pnpm build:app
 ```
 
-This will create platform-specific installers in the `dist/visink-app/` directory.
+This will create platform-specific installers in the `dist/wele-starter-app/` directory.
 
 ## Deployment
 
@@ -179,8 +179,8 @@ This will create platform-specific installers in the `dist/visink-app/` director
 
 The application uses a **unified deployment model**:
 
-- Frontend (Vue) is built as static files → `dist/visink-web/ui/`
-- Backend (NestJS) is built → `dist/visink-web/server/`
+- Frontend (Vue) is built as static files → `dist/wele-starter-web/ui/`
+- Backend (NestJS) is built → `dist/wele-starter-web/server/`
 - NestJS serves the static frontend files
 - API routes are under `/api` prefix
 - Single Node.js process serves both frontend and backend
@@ -189,10 +189,10 @@ The application uses a **unified deployment model**:
 
 ### Build Commands
 
-| Command           | Use Case             | Output                                                            |
-| ----------------- | -------------------- | ----------------------------------------------------------------- |
-| `pnpm build`      | Development, testing | `dist/visink-web/server` (code only), `dist/visink-web/ui`        |
-| `pnpm build:prod` | Deployment           | `dist/visink-web/server` (code + prod deps), `dist/visink-web/ui` |
+| Command           | Use Case             | Output                                                                        |
+| ----------------- | -------------------- | ----------------------------------------------------------------------------- |
+| `pnpm build`      | Development, testing | `dist/wele-starter-web/server` (code only), `dist/wele-starter-web/ui`        |
+| `pnpm build:prod` | Deployment           | `dist/wele-starter-web/server` (code + prod deps), `dist/wele-starter-web/ui` |
 
 **Development Build:**
 
@@ -213,10 +213,10 @@ pnpm build:prod
 ```
 
 - Builds frontend and backend code
-- Copies all `node_modules` and configuration files to `dist/visink-web/server/`
+- Copies all `node_modules` and configuration files to `dist/wele-starter-web/server/`
 - Creates completely self-contained deployment package
 - Use for: production deployment, Docker images, CI/CD pipelines
-- Deploy by: uploading only `dist/visink-web/server` directory
+- Deploy by: uploading only `dist/wele-starter-web/server` directory
 
 ### When to Use Each Command
 
@@ -225,7 +225,7 @@ pnpm build:prod
 - Developing or testing locally
 - Running tests against built code
 - Want to minimize build time during development
-- Output: `dist/visink-web/` with `ui/` and `server/` (requires project `node_modules`)
+- Output: `dist/wele-starter-web/` with `ui/` and `server/` (requires project `node_modules`)
 
 **Use `pnpm build:prod` when:**
 
@@ -233,13 +233,13 @@ pnpm build:prod
 - Building Docker images
 - Deploying to cloud platforms (Heroku, Railway, AWS, etc.)
 - Creating distributable packages
-- Output: `dist/visink-web/` with all dependencies included in `server/`
+- Output: `dist/wele-starter-web/` with all dependencies included in `server/`
 
 **Use `pnpm build:app` when:**
 
 - Releasing Electron desktop application
 - Creating platform-specific installers (DMG, EXE, AppImage, etc.)
-- Output: `dist/visink-app/` with installers + `dist/visink-web/` for internal use
+- Output: `dist/wele-starter-app/` with installers + `dist/wele-starter-web/` for internal use
 
 ### Web Application Deployment
 
@@ -251,24 +251,24 @@ Since frontend and backend are deployed together, you only need to deploy the ba
 # Build for production (includes all dependencies)
 pnpm build:prod
 
-# Run the server immediately (all dependencies are included in dist/visink-web/server/)
-cd dist/visink-web && node server/main.js
-# Application available at http://localhost:4300
+# Run the server immediately (all dependencies are included in dist/wele-starter-web/server/)
+cd dist/wele-starter-web && node server/main.js
+# Application available at http://localhost:4160
 ```
 
-After `pnpm build:prod`, the `dist/visink-web/` directory is completely self-contained:
+After `pnpm build:prod`, the `dist/wele-starter-web/` directory is completely self-contained:
 
-- `dist/visink-web/ui/` - Compiled frontend code
-- `dist/visink-web/server/` - Compiled backend with production dependencies only
-  - `dist/visink-web/server/node_modules/` - **Production dependencies only** (~150-250 MB)
+- `dist/wele-starter-web/ui/` - Compiled frontend code
+- `dist/wele-starter-web/server/` - Compiled backend with production dependencies only
+  - `dist/wele-starter-web/server/node_modules/` - **Production dependencies only** (~150-250 MB)
     - Installed via `pnpm install --prod --frozen-lockfile` during build
     - Excludes devDependencies, test files, and unnecessary artifacts
-  - `dist/visink-web/server/web/` - Copy of frontend (served by NestJS)
+  - `dist/wele-starter-web/server/web/` - Copy of frontend (served by NestJS)
   - Configuration files (package.json, pnpm-lock.yaml)
 
 **Size Optimization:** Production-only dependencies reduce size by 50-70% compared to full node_modules (~150-250 MB instead of 500+ MB).
 
-Ready to deploy without any additional installation steps: `cd dist/visink-web && node server/main.js`
+Ready to deploy without any additional installation steps: `cd dist/wele-starter-web && node server/main.js`
 
 #### Docker Deployment
 
@@ -292,15 +292,15 @@ WORKDIR /app
 # Copy entire dist/web directory (ui + server with node_modules)
 COPY --from=builder /app/dist/web ./
 
-EXPOSE 4300
+EXPOSE 4160
 CMD ["cd server && node main.js"]
 ```
 
 **Build and run:**
 
 ```bash
-docker build -t visink:latest .
-docker run -p 4300:4300 visink:latest
+docker build -t wele-starter:latest .
+docker run -p 4160:4160 wele-starter:latest
 ```
 
 **Option 2: Build locally, then deploy to Docker (lightweight):**
@@ -314,12 +314,12 @@ pnpm build:prod
 FROM node:20-alpine
 WORKDIR /app
 COPY dist/web ./
-EXPOSE 4300
+EXPOSE 4160
 CMD ["cd server && node main.js"]
 
 # Build and run
-docker build -f Dockerfile.prod -t visink:latest .
-docker run -p 4300:4300 visink:latest
+docker build -f Dockerfile.prod -t wele-starter:latest .
+docker run -p 4160:4160 wele-starter:latest
 ```
 
 **Comparison:**
@@ -333,7 +333,7 @@ docker run -p 4300:4300 visink:latest
 
 ```bash
 # Create Procfile
-echo "web: cd dist/visink-web && node server/main.js" > Procfile
+echo "web: cd dist/wele-starter-web && node server/main.js" > Procfile
 
 # Deploy
 git push heroku main
@@ -343,8 +343,8 @@ git push heroku main
 
 - Push your code to git repository
 - Connect repository and set build command: `pnpm build:prod`
-- Set start command: `cd dist/visink-web && node server/main.js`
-- Expose port: 4300
+- Set start command: `cd dist/wele-starter-web && node server/main.js`
+- Expose port: 4160
 
 **AWS / Google Cloud / Azure:**
 
@@ -352,23 +352,23 @@ git push heroku main
 # Deploy dist/web directory
 # Ensure Node.js 20+ is installed
 # Environment: NODE_ENV=production
-# Start command: cd dist/visink-web && node server/main.js
+# Start command: cd dist/wele-starter-web && node server/main.js
 ```
 
 ### Production Environment Variables
 
-Create `.env` file in `dist/visink-web/server/` or set environment variables (for backend only):
+Create `.env` file in `dist/wele-starter-web/server/` or set environment variables (for backend only):
 
 ```env
 NODE_ENV=production
-PORT=4300
+PORT=4160
 CORS_ORIGIN=https://yourdomain.com
 ```
 
 If using Docker, pass via environment:
 
 ```bash
-docker run -e PORT=4300 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain.com visink:latest
+docker run -e PORT=4160 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain.com wele-starter:latest
 ```
 
 ### Electron App Deployment
@@ -379,21 +379,21 @@ docker run -e PORT=4300 -e NODE_ENV=production -e CORS_ORIGIN=https://yourdomain
 
 ```bash
 pnpm build:app
-# Creates: dist/visink-app/visink-x.x.x.dmg, visink-x.x.x.zip, visink-x.x.x.tar.gz
+# Creates: dist/wele-starter-app/wele-starter-x.x.x.dmg, wele-starter-x.x.x.zip, wele-starter-x.x.x.tar.gz
 ```
 
 **For Windows:**
 
 ```bash
 pnpm build:app
-# Creates: dist/visink-app/visink Setup x.x.x.exe (NSIS installer)
+# Creates: dist/wele-starter-app/wele-starter Setup x.x.x.exe (NSIS installer)
 ```
 
 **For Linux:**
 
 ```bash
 pnpm build:app
-# Creates: dist/visink-app/AppImage, deb package, etc.
+# Creates: dist/wele-starter-app/AppImage, deb package, etc.
 ```
 
 **Build for specific platform only:**

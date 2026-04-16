@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, '..');
-const distVisinkWebDir = path.join(projectRoot, 'dist', 'visink-web');
+const distVisinkWebDir = path.join(projectRoot, 'dist', 'wele-starter-web');
 const distServerDir = path.join(distVisinkWebDir, 'server');
 const distUiDir = path.join(distVisinkWebDir, 'ui');
 const distServerWebDir = path.join(distServerDir, 'web');
@@ -75,7 +75,7 @@ function copyFile(src: string, dest: string): void {
 try {
   const nodeModulesExist = fs.existsSync(path.join(distServerDir, 'node_modules'));
 
-  console.log('📦 Setting up production dependencies in dist/visink-web/server...');
+  console.log('📦 Setting up production dependencies in dist/wele-starter-web/server...');
 
   // Step 1: Copy package.json and lock files FIRST
   console.log('  📄 Copying package.json...');
@@ -116,7 +116,7 @@ try {
     console.log('  📄 Copying frontend to server/web...');
     copyDirSync(distUiDir, distServerWebDir, true);
   } else {
-    console.warn('  ⚠️  Warning: dist/visink-web/ui not found. Run pnpm build:ui first.');
+    console.warn('  ⚠️  Warning: dist/wele-starter-web/ui not found. Run pnpm build:ui first.');
   }
 
   console.log('✅ Setup completed successfully!');

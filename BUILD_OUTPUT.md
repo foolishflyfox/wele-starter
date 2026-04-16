@@ -12,15 +12,15 @@ pnpm build
 
 ```
 pnpm build
-  ├─ pnpm build:server  (nest build → dist/visink-web/server)
-  └─ pnpm build:ui      (vite build → dist/visink-web/ui)
+  ├─ pnpm build:server  (nest build → dist/wele-starter-web/server)
+  └─ pnpm build:ui      (vite build → dist/wele-starter-web/ui)
 ```
 
 ### 生成的目录结构
 
 ```
 dist/
-└── visink-web/                      # Web 应用部署包
+└── wele-starter-web/                      # Web 应用部署包
     ├── ui/                          # 前端编译结果（Vue）
     │   ├── index.html
     │   ├── assets/
@@ -51,9 +51,9 @@ dist/
 
 ```bash
 # 需要项目根目录的 node_modules
-cd dist/visink-web
+cd dist/wele-starter-web
 node server/main.js
-# 访问 http://localhost:4300
+# 访问 http://localhost:4160
 ```
 
 ---
@@ -79,7 +79,7 @@ pnpm build:prod
 
 ```
 dist/
-└── visink-web/                      # 完整的自包含 Web 应用
+└── wele-starter-web/                      # 完整的自包含 Web 应用
     ├── ui/                          # 前端编译源
     │   ├── index.html
     │   └── assets/
@@ -117,9 +117,9 @@ dist/
 
 ```bash
 # 完全独立，无需其他依赖
-cd dist/visink-web
+cd dist/wele-starter-web
 node server/main.js
-# 访问 http://localhost:4300
+# 访问 http://localhost:4160
 ```
 
 ---
@@ -136,27 +136,27 @@ pnpm build:app
 
 ```
 pnpm build:app
-  ├─ pnpm build:ui          (vite build → dist/visink-web/ui)
-  ├─ pnpm build:server      (nest build → dist/visink-web/server)
+  ├─ pnpm build:ui          (vite build → dist/wele-starter-web/ui)
+  ├─ pnpm build:server      (nest build → dist/wele-starter-web/server)
   ├─ electron-vite build    (编译 Electron main/preload/renderer → out/)
-  └─ electron-builder       (打包应用 → dist/visink-app/)
+  └─ electron-builder       (打包应用 → dist/wele-starter-app/)
 ```
 
 ### 生成的目录结构
 
 ```
 dist/
-├── visink-web/                      # Web 应用（同 pnpm build）
+├── wele-starter-web/                      # Web 应用（同 pnpm build）
 │   ├── ui/
 │   └── server/
 │
-└── visink-app/                      # Electron 应用安装程序
+└── wele-starter-app/                      # Electron 应用安装程序
     └── mac/                         # macOS 构建（取决于构建平台）
-        ├── visink-1.0.0.dmg       # DMG 磁盘镜像
-        ├── visink-1.0.0-mac.zip   # ZIP 压缩包
-        ├── visink-1.0.0.dmg.blockmap
-        ├── visink-1.0.0-mac.zip.blockmap
-        └── visink.app/            # 应用包
+        ├── wele-starter-1.0.0.dmg       # DMG 磁盘镜像
+        ├── wele-starter-1.0.0-mac.zip   # ZIP 压缩包
+        ├── wele-starter-1.0.0.dmg.blockmap
+        ├── wele-starter-1.0.0-mac.zip.blockmap
+        └── wele-starter.app/            # 应用包
             └── Contents/
                 ├── MacOS/
                 ├── Resources/
@@ -177,13 +177,13 @@ out/                                # Electron 编译中间产物（构建完成
 
 ### 平台特定的输出文件
 
-| 平台    | 文件                     | 大小        |
-| ------- | ------------------------ | ----------- |
-| macOS   | `visink-1.0.0.dmg`       | ~100-150 MB |
-| macOS   | `visink-1.0.0-mac.zip`   | ~100-150 MB |
-| Windows | `visink Setup 1.0.0.exe` | ~150-200 MB |
-| Linux   | `visink-1.0.0.AppImage`  | ~100-150 MB |
-| Linux   | `visink-1.0.0.deb`       | ~100-150 MB |
+| 平台    | 文件                           | 大小        |
+| ------- | ------------------------------ | ----------- |
+| macOS   | `wele-starter-1.0.0.dmg`       | ~100-150 MB |
+| macOS   | `wele-starter-1.0.0-mac.zip`   | ~100-150 MB |
+| Windows | `wele-starter Setup 1.0.0.exe` | ~150-200 MB |
+| Linux   | `wele-starter-1.0.0.AppImage`  | ~100-150 MB |
+| Linux   | `wele-starter-1.0.0.deb`       | ~100-150 MB |
 
 ### 特点
 
@@ -199,12 +199,12 @@ out/                                # Electron 编译中间产物（构建完成
 
 ```
 1. 用户双击应用 → Electron 主进程启动
-                 ├─ 启动子进程：fork dist/visink-web/server/main.js
-                 ├─ NestJS 启动 → 监听 http://localhost:4300
-                 └─ 加载前端：dist/visink-web/ui
+                 ├─ 启动子进程：fork dist/wele-starter-web/server/main.js
+                 ├─ NestJS 启动 → 监听 http://localhost:4160
+                 └─ 加载前端：dist/wele-starter-web/ui
 
-2. Electron 窗口加载 → http://localhost:4300
-                      └─ 返回 dist/visink-web/ui 的 HTML
+2. Electron 窗口加载 → http://localhost:4160
+                      └─ 返回 dist/wele-starter-web/ui 的 HTML
 
 3. 用户交互 → 前端与 NestJS API 通信 (/api/*)
                └─ 完整的桌面应用体验
@@ -214,26 +214,26 @@ out/                                # Electron 编译中间产物（构建完成
 
 - **Electron Framework**: Chromium 渲染引擎
 - **Node.js 运行时**: 运行 NestJS 后端
-- **dist/visink-web/**: Web 应用代码
+- **dist/wele-starter-web/**: Web 应用代码
 - **node_modules**: 应用依赖（在应用包内或通过配置包含）
 
 ---
 
 ## 📊 对比总结
 
-| 特性                   | `pnpm build`                                | `pnpm build:prod`  | `pnpm build:app`                        |
-| ---------------------- | ------------------------------------------- | ------------------ | --------------------------------------- |
-| **输出位置**           | `dist/visink-web/`                          | `dist/visink-web/` | `dist/visink-app/` + `dist/visink-web/` |
-| **构建前端**           | ✅                                          | ✅                 | ✅                                      |
-| **构建后端**           | ✅                                          | ✅                 | ✅                                      |
-| **包含 node_modules**  | ❌                                          | ✅ (prod only)     | ✅ (in app)                             |
-| **复制前端副本**       | ❌                                          | ✅                 | ✅                                      |
-| **生成 Electron 应用** | ❌                                          | ❌                 | ✅                                      |
-| **输出大小**           | ~100 KB                                     | **~150-250 MB** ⬇️ | ~100-200 MB                             |
-| **是否自包含**         | ❌                                          | ✅                 | ✅                                      |
-| **启动命令**           | `cd dist/visink-web && node server/main.js` | 同左               | 双击应用                                |
-| **部署方式**           | 手动 + node_modules                         | 直接上传           | 发布安装程序                            |
-| **适用场景**           | 开发、测试                                  | 生产服务器         | 发布桌面应用                            |
+| 特性                   | `pnpm build`                                      | `pnpm build:prod`        | `pnpm build:app`                                    |
+| ---------------------- | ------------------------------------------------- | ------------------------ | --------------------------------------------------- |
+| **输出位置**           | `dist/wele-starter-web/`                          | `dist/wele-starter-web/` | `dist/wele-starter-app/` + `dist/wele-starter-web/` |
+| **构建前端**           | ✅                                                | ✅                       | ✅                                                  |
+| **构建后端**           | ✅                                                | ✅                       | ✅                                                  |
+| **包含 node_modules**  | ❌                                                | ✅ (prod only)           | ✅ (in app)                                         |
+| **复制前端副本**       | ❌                                                | ✅                       | ✅                                                  |
+| **生成 Electron 应用** | ❌                                                | ❌                       | ✅                                                  |
+| **输出大小**           | ~100 KB                                           | **~150-250 MB** ⬇️       | ~100-200 MB                                         |
+| **是否自包含**         | ❌                                                | ✅                       | ✅                                                  |
+| **启动命令**           | `cd dist/wele-starter-web && node server/main.js` | 同左                     | 双击应用                                            |
+| **部署方式**           | 手动 + node_modules                               | 直接上传                 | 发布安装程序                                        |
+| **适用场景**           | 开发、测试                                        | 生产服务器               | 发布桌面应用                                        |
 
 ---
 
@@ -243,25 +243,25 @@ out/                                # Electron 编译中间产物（构建完成
 
 ```bash
 pnpm build
-cd dist/visink-web
+cd dist/wele-starter-web
 node server/main.js
-# 访问 http://localhost:4300
+# 访问 http://localhost:4160
 ```
 
 ### 场景 2: 生产部署（Web 服务器）
 
 ```bash
 pnpm build:prod
-cd dist/visink-web
+cd dist/wele-starter-web
 node server/main.js
-# 或上传整个 dist/visink-web 到服务器
+# 或上传整个 dist/wele-starter-web 到服务器
 ```
 
 ### 场景 3: 发布桌面应用
 
 ```bash
 pnpm build:app
-# 获取安装程序：dist/visink-app/mac/ (或 win/linux)
+# 获取安装程序：dist/wele-starter-app/mac/ (或 win/linux)
 # 用户双击应用即可使用
 ```
 
@@ -271,7 +271,7 @@ pnpm build:app
 pnpm build:prod
 # Dockerfile 内容：
 # FROM node:20-alpine
-# COPY dist/visink-web ./
+# COPY dist/wele-starter-web ./
 # CMD ["cd server && node main.js"]
 ```
 
@@ -282,24 +282,24 @@ pnpm build:prod
 ### pnpm build 时的 NestJS 前端寻址
 
 ```
-__dirname = dist/visink-web/server/
-└─ ../ui = dist/visink-web/ui  ← 前端在这里
+__dirname = dist/wele-starter-web/server/
+└─ ../ui = dist/wele-starter-web/ui  ← 前端在这里
 ```
 
 ### pnpm build:prod 时的 NestJS 前端寻址
 
 ```
-__dirname = dist/visink-web/server/
-├─ web/ = dist/visink-web/server/web  ← 优先使用（有副本）
-└─ ../ui = dist/visink-web/ui         ← 备选
+__dirname = dist/wele-starter-web/server/
+├─ web/ = dist/wele-starter-web/server/web  ← 优先使用（有副本）
+└─ ../ui = dist/wele-starter-web/ui         ← 备选
 ```
 
 ### pnpm build:app 时的 Electron 后端寻址
 
 ```
 __dirname = out/main/ (编译后)
-映射到运行时 = dist/visink-app/Resources/ (在应用包内)
-└─ ../../dist/visink-web/server/main.js ← Electron fork 这个进程
+映射到运行时 = dist/wele-starter-app/Resources/ (在应用包内)
+└─ ../../dist/wele-starter-web/server/main.js ← Electron fork 这个进程
 ```
 
 ---

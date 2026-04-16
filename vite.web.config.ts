@@ -24,7 +24,7 @@ const mimeTypes: Record<string, string> = {
 export default defineConfig({
   root: 'src/renderer',
   build: {
-    outDir: resolve(__dirname, 'dist/visink-web/ui'),
+    outDir: resolve(__dirname, 'dist/wele-starter-web/ui'),
     emptyOutDir: true,
     rollupOptions: {
       input: resolve(__dirname, 'src/renderer/index.html')
@@ -89,10 +89,10 @@ export default defineConfig({
     vueDevTools()
   ],
   server: {
-    port: 4030,
+    port: 4016,
     proxy: {
       '/api': {
-        target: 'http://localhost:4300',
+        target: 'http://localhost:4160',
         changeOrigin: true
       }
     }

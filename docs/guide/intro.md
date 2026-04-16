@@ -1,6 +1,6 @@
 # 介绍
 
-Visink 是一个基于 Electron、Vue 3 和 TypeScript 构建的现代跨平台桌面应用。
+Wele Starter 是一个基于 Electron、Vue 3 和 TypeScript 构建的现代跨平台桌面应用。
 
 ## 技术栈
 
@@ -35,12 +35,12 @@ pnpm docs:dev
 
 ### 部署架构
 
-Visink 采用**统一部署模型**：前端（Vue）编译为静态文件，由 NestJS 后端在同一端口提供服务。
+Wele Starter 采用**统一部署模型**：前端（Vue）编译为静态文件，由 NestJS 后端在同一端口提供服务。
 
-- 前端静态文件：`dist/visink-web/ui/`
-- 后端服务：`dist/visink-web/server/`
+- 前端静态文件：`dist/wele-starter-web/ui/`
+- 后端服务：`dist/wele-starter-web/server/`
 - API 前缀：`/api`
-- 生产端口：`4300`
+- 生产端口：`4160`
 
 ### 构建命令
 
@@ -57,18 +57,18 @@ Visink 采用**统一部署模型**：前端（Vue）编译为静态文件，由
 pnpm build:prod
 
 # 直接运行，无需安装依赖
-cd dist/visink-web && node server/main.js
-# 访问 http://localhost:4300
+cd dist/wele-starter-web && node server/main.js
+# 访问 http://localhost:4160
 ```
 
 ### Electron 应用构建
 
-| 命令               | 说明                                  | 输出目录                 |
-| ------------------ | ------------------------------------- | ------------------------ |
-| `pnpm build:app`   | 构建当前系统（macOS）的 Electron 应用 | `dist/visink-app/mac/`   |
-| `pnpm build:win`   | 交叉编译 Windows 安装包               | `dist/visink-app/win/`   |
-| `pnpm build:linux` | 交叉编译 Linux 安装包                 | `dist/visink-app/linux/` |
+| 命令               | 说明                                  | 输出目录                       |
+| ------------------ | ------------------------------------- | ------------------------------ |
+| `pnpm build:app`   | 构建当前系统（macOS）的 Electron 应用 | `dist/wele-starter-app/mac/`   |
+| `pnpm build:win`   | 交叉编译 Windows 安装包               | `dist/wele-starter-app/win/`   |
+| `pnpm build:linux` | 交叉编译 Linux 安装包                 | `dist/wele-starter-app/linux/` |
 
 `build:app` 针对当前运行的操作系统（例如：macOS）构建，生成 `.dmg` 等原生安装包；`build:win` 和 `build:linux` 则分别生成 Windows（`.exe`）和 Linux（`.AppImage` / `.deb`）的安装包，可在 macOS 上交叉编译，适用于 CI/CD 多平台分发场景。
 
-Electron 应用启动后，内置的 NestJS 后端同样会监听 `4300` 端口，因此也可以直接通过浏览器访问 `http://localhost:4300` 使用 Web 版界面。
+Electron 应用启动后，内置的 NestJS 后端同样会监听 `4160` 端口，因此也可以直接通过浏览器访问 `http://localhost:4160` 使用 Web 版界面。

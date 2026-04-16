@@ -1,7 +1,7 @@
 # 文件结构
 
 ```
-visink/
+wele-starter/
 ├── src/                        # 源代码
 │   ├── main/                   # Electron 主进程（Node.js 环境）
 │   │   └── index.ts            # 主进程入口，负责创建窗口、管理应用生命周期
@@ -36,10 +36,10 @@ visink/
 │   └── copy-deps.js            # 将 node_modules 复制到生产构建目录
 │
 ├── dist/                       # 构建产物（git 忽略）
-│   ├── visink-web/             # Web 应用构建产物
+│   ├── wele-starter-web/             # Web 应用构建产物
 │   │   ├── ui/                 # 前端静态文件
 │   │   └── server/             # 后端编译产物
-│   └── visink-app/             # Electron 安装包
+│   └── wele-starter-app/             # Electron 安装包
 │
 ├── out/                        # Electron 编译中间产物（git 忽略）
 │
@@ -78,7 +78,7 @@ Electron **预加载脚本**，在渲染进程加载前执行，通过 `contextB
 
 - 提供 REST API（前缀 `/api`）
 - 在生产模式下托管前端静态文件
-- 统一监听 `4300` 端口
+- 统一监听 `4160` 端口
 
 ### `docs/`
 

@@ -1,8 +1,8 @@
-# Visink Project Guide
+# Wele Starter Project Guide
 
 ## Project Overview
 
-**Visink** is a modern desktop application built with Electron, Vue 3, and TypeScript. It combines a NestJS backend with a Vue frontend to create a robust cross-platform application.
+**Wele Starter** is a modern desktop application built with Electron, Vue 3, and TypeScript. It combines a NestJS backend with a Vue frontend to create a robust cross-platform application.
 
 ### Tech Stack
 
@@ -106,7 +106,7 @@ pnpm install
 ### Unified Deployment Model
 
 - **Frontend & Backend Together**: Single Node.js process
-  - Frontend (Vue) → static files in `dist/visink-web/ui/`
+  - Frontend (Vue) → static files in `dist/wele-starter-web/ui/`
   - Backend (NestJS) → serves API + static files
   - API prefix: `/api`
   - Frontend port: served by backend on same port
@@ -114,7 +114,7 @@ pnpm install
 ### Production Build
 
 ```bash
-pnpm build          # Builds both frontend (dist/visink-web/ui) and backend (dist/visink-web/server)
+pnpm build          # Builds both frontend (dist/wele-starter-web/ui) and backend (dist/wele-starter-web/server)
 ```
 
 ### Build Commands
@@ -123,7 +123,7 @@ pnpm build          # Builds both frontend (dist/visink-web/ui) and backend (dis
 
 ```bash
 pnpm build          # Builds: pnpm build:server + pnpm build:ui
-                    # Output: dist/visink-web/ui/ + dist/visink-web/server/
+                    # Output: dist/wele-starter-web/ui/ + dist/wele-starter-web/server/
                     # Size: ~100 KB (code only, no dependencies)
 ```
 
@@ -131,7 +131,7 @@ pnpm build          # Builds: pnpm build:server + pnpm build:ui
 
 ```bash
 pnpm build:prod     # Builds: pnpm build:server + pnpm build:ui + pnpm copy:deps
-                    # Output: dist/visink-web/ with all dependencies
+                    # Output: dist/wele-starter-web/ with all dependencies
                     # Size: ~500+ MB (self-contained)
 ```
 
@@ -139,7 +139,7 @@ pnpm build:prod     # Builds: pnpm build:server + pnpm build:ui + pnpm copy:deps
 
 ```bash
 pnpm build:app      # Builds: pnpm build:ui + pnpm build:server + electron-vite + electron-builder
-                    # Output: dist/visink-app/ (installers) + dist/visink-web/
+                    # Output: dist/wele-starter-app/ (installers) + dist/wele-starter-web/
                     # Size: ~100-200 MB (per platform)
 ```
 
@@ -150,8 +150,8 @@ pnpm build:app      # Builds: pnpm build:ui + pnpm build:server + electron-vite 
 pnpm build:prod
 
 # Run immediately - no installation needed
-cd dist/visink-web && node server/main.js
-# Access at http://localhost:4300
+cd dist/wele-starter-web && node server/main.js
+# Access at http://localhost:4160
 ```
 
 ### Docker Deployment
@@ -159,8 +159,8 @@ cd dist/visink-web && node server/main.js
 **Option 1: Build in Docker (recommended for CI/CD)**
 
 ```bash
-docker build -t visink:latest .
-docker run -p 4300:4300 visink:latest
+docker build -t wele-starter:latest .
+docker run -p 4160:4160 wele-starter:latest
 ```
 
 Uses `pnpm build:prod` in Dockerfile. See README.md for template.
@@ -169,11 +169,11 @@ Uses `pnpm build:prod` in Dockerfile. See README.md for template.
 
 ```bash
 pnpm build:prod
-docker build -f Dockerfile.prod -t visink:latest .
-docker run -p 4300:4300 visink:latest
+docker build -f Dockerfile.prod -t wele-starter:latest .
+docker run -p 4160:4160 wele-starter:latest
 ```
 
-Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
+Build locally and push only `dist/wele-starter-web/server/` to Docker (lighter image).
 
 ## Common Issues & Solutions
 
@@ -181,7 +181,7 @@ Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
 
 - Development UI: 5173 (Vite dev server)
 - Development Backend: 3000 (NestJS)
-- Production: 4300 (unified port)
+- Production: 4160 (unified port)
 - If ports are in use, update environment variables or kill conflicting processes
 
 ### Electron Dev Issues
@@ -195,7 +195,7 @@ Build locally and push only `dist/visink-web/server/` to Docker (lighter image).
 
 ```
 dist/
-└── visink-web/              # Web app package
+└── wele-starter-web/              # Web app package
     ├── ui/                  # Compiled frontend (Vue) ~70 KB
     │   ├── index.html
     │   ├── assets/
@@ -215,7 +215,7 @@ Use for: development, testing. Requires `node_modules` from project root.
 
 ```
 dist/
-└── visink-web/              # Complete self-contained web app
+└── wele-starter-web/              # Complete self-contained web app
     ├── ui/                  # Compiled frontend (original)
     │   ├── index.html
     │   ├── assets/
@@ -234,21 +234,21 @@ dist/
         └── ... (other files)
 ```
 
-Ready to deploy: `cd dist/visink-web && node server/main.js` - no installation needed!
+Ready to deploy: `cd dist/wele-starter-web && node server/main.js` - no installation needed!
 
 **After `pnpm build:app` (Electron app):**
 
 ```
 dist/
-├── visink-web/              # Web app (same as pnpm build)
+├── wele-starter-web/              # Web app (same as pnpm build)
 │   ├── ui/
 │   └── server/
 │
-└── visink-app/              # Electron installers
+└── wele-starter-app/              # Electron installers
     └── mac/                 # macOS (platform-specific)
-        ├── visink-1.0.0.dmg
-        ├── visink-1.0.0-mac.zip
-        ├── visink.app/
+        ├── wele-starter-1.0.0.dmg
+        ├── wele-starter-1.0.0-mac.zip
+        ├── wele-starter.app/
         └── ...
 
 out/                         # Electron build artifacts
@@ -267,10 +267,10 @@ Ready to deploy: Double-click installer or app bundle!
 
 ## Key Files & Scripts
 
-- `src/server/main.ts` - Configures static file serving (serves `dist/visink-web/ui/`)
-- `scripts/copy-deps.js` - Copies `node_modules` to `dist/visink-web/server/` (called by `build:prod`)
-- `vite.web.config.ts` - Frontend build configuration (output: `dist/visink-web/ui/`)
-- `tsconfig.server.json` - Backend TypeScript configuration (output: `dist/visink-web/server/`)
+- `src/server/main.ts` - Configures static file serving (serves `dist/wele-starter-web/ui/`)
+- `scripts/copy-deps.js` - Copies `node_modules` to `dist/wele-starter-web/server/` (called by `build:prod`)
+- `vite.web.config.ts` - Frontend build configuration (output: `dist/wele-starter-web/ui/`)
+- `tsconfig.server.json` - Backend TypeScript configuration (output: `dist/wele-starter-web/server/`)
 - `package.json` - Contains `build` (dev) and `build:prod` (deployment) commands
 
 ## License

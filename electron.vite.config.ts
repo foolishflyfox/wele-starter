@@ -104,10 +104,10 @@ export default defineConfig({
       vueDevTools()
     ],
     server: {
-      port: 4030,
+      port: 4016,
       proxy: {
         '/api': {
-          target: 'http://localhost:4300',
+          target: 'http://localhost:4160',
           changeOrigin: true
         }
       }

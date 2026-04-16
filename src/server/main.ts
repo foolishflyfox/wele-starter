@@ -17,7 +17,7 @@ async function bootstrap() {
   app.enableCors();
 
   // 提供静态文件服务（前端 build 产物）
-  // 开发模式：__dirname 指向 dist/visink-web/server，前端在 ../ui
+  // 开发模式：__dirname 指向 dist/wele-starter-web/server，前端在 ../ui
   // 生产模式：前端副本在 web/（复制脚本会创建）
   const staticPaths = [
     join(__dirname, 'web'), // 生产模式（有依赖复制的版本）
@@ -36,7 +36,7 @@ async function bootstrap() {
     }
   }
 
-  const port = process.env.PORT || 4300;
+  const port = process.env.PORT || 4160;
   await app.listen(port);
   console.log(`Server running on http://localhost:${port}`);
 }

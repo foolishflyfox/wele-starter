@@ -12,14 +12,14 @@ const outDir = isGithubPages
   : resolve(__dirname, '../../src/renderer/public/docs');
 
 export default defineConfig({
-  title: 'Visink',
-  description: 'Visink 项目文档',
+  title: 'Wele Starter',
+  description: 'Wele Starter 项目文档',
   lang: 'zh-CN',
   base,
   outDir,
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }]],
   themeConfig: {
-    siteTitle: 'Visink 文档',
+    siteTitle: 'Wele Starter 文档',
     search: {
       provider: 'local'
     },
@@ -42,7 +42,7 @@ export default defineConfig({
         }
       ]
     },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/foolishflyfox/visink' }]
+    socialLinks: [{ icon: 'github', link: 'https://github.com/foolishflyfox/wele-starter' }]
   },
   vite: {
     server: {

@@ -16,16 +16,16 @@ function startServer(): void {
     // 开发模式：使用 spawn 运行 ts-node
     console.log('Starting server in dev mode: ts-node src/server/main.ts');
     serverProcess = spawn('node', ['--loader', 'ts-node/esm', 'src/server/main.ts'], {
-      env: { ...process.env, PORT: '4300', NODE_ENV: 'development' },
+      env: { ...process.env, PORT: '4160', NODE_ENV: 'development' },
       stdio: 'inherit',
       cwd: join(__dirname, '../..')
     });
   } else {
     // 生产模式：使用 fork 运行编译后的 JavaScript
-    const serverScript = join(__dirname, '../../dist/visink-web/server/main.js');
+    const serverScript = join(__dirname, '../../dist/wele-starter-web/server/main.js');
     console.log('Starting server in prod mode:', serverScript);
     serverProcess = fork(serverScript, [], {
-      env: { ...process.env, PORT: '4300', NODE_ENV: 'production' },
+      env: { ...process.env, PORT: '4160', NODE_ENV: 'production' },
       stdio: 'inherit'
     });
   }
@@ -56,7 +56,7 @@ function createWindow(): void {
   // 这是一种 "Electron 内嵌 Web Server" 的架构模式，优点是前后端共用同一套代码
   // Web 部署和 Electron 打包产物完全一致；
   // 代价是 Electron 必须依赖内置的 NestJS 服务才能运行，无法完全离线。
-  const startUrl = isDev ? 'http://localhost:4030' : 'http://localhost:4300';
+  const startUrl = isDev ? 'http://localhost:4016' : 'http://localhost:4160';
 
   mainWindow.loadURL(startUrl);
 

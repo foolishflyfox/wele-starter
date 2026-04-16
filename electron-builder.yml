@@ -1,11 +1,11 @@
 appId: com.electron.app
-productName: visink
+productName: wele-starter
 directories:
   buildResources: build
-  output: dist/visink-app
+  output: dist/wele-starter-app
 files:
   - 'out/**'
-  - 'dist/visink-web/**'
+  - 'dist/wele-starter-web/**'
   - 'package.json'
   - 'node_modules/**'
   - '!**/.vscode/*'
@@ -17,7 +17,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: visink
+  executableName: wele-starter
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

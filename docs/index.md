@@ -2,12 +2,12 @@
 layout: home
 
 hero:
-  name: 'Visink'
+  name: 'Wele Starter'
   text: '现代全栈应用框架'
   tagline: 基于 Vue 3 + TypeScript + NestJS 构建，支持部署为 Web 应用或 Electron 跨平台桌面应用
   image:
     src: /favicon.svg
-    alt: Visink Logo
+    alt: Wele Starter Logo
   actions:
     - theme: brand
       text: 快速开始
