@@ -21,7 +21,7 @@
     "build": "pnpm check && pnpm build:server && pnpm build:ui",
     "build:prod": "pnpm build:server && pnpm build:ui && pnpm copy:deps",
     "build:electron": "pnpm build:ui && pnpm build:server && electron-vite build",
-    "build:app": "pnpm build:electron && electron-builder --config.directories.output=dist/wele-starter-app/mac",
+    "build:app": "pnpm build:electron && tsx scripts/build-app.ts",
     "build:win": "pnpm build:electron && electron-builder --win --config.directories.output=dist/wele-starter-app/win",
     "build:linux": "pnpm build:electron && electron-builder --linux --config.directories.output=dist/wele-starter-app/linux",
     "build:server": "nest build",
